@@ -1,7 +1,7 @@
 package Engine;
 
-import Model.TripOffer;
-import Model.TripRequest;
+import model.TripOffer;
+import model.TripRequest;
 
 import java.util.Set;
 
