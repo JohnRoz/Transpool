@@ -1,4 +1,4 @@
-package Controller;
+package Engine;
 
 import Model.TripOffer;
 import Model.TripRequest;
@@ -6,9 +6,9 @@ import Model.TripRequest;
 import java.util.Set;
 
 /**
- * TranspoolManager is a Util class, that managers the offers and requests of the trips
+ * TripsManager is a Util class, that managers the offers and requests of the trips
  */
-public class TranspoolManager {
+public class TripsManager {
     private static Set<TripOffer> offers;
     private static Set<TripRequest> requests;
 

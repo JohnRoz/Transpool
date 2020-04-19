@@ -1,4 +1,4 @@
-package com.company;
+package UI;
 
 import Model.Map;
 import Model.Road;
