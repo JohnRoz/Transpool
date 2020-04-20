@@ -1,27 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="engine:jar" />
+      <artifact name="model:jar" />
+      <artifact name="ui:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="1fc94a2c-cb54-481c-9d4e-62b291d54170" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/USER1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Engine/Engine.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/UI/Input.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/UI/Output.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/UI/TranspoolConsole.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/model/Enums/UserAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/model/Interfaces/IEngine.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/model/util/Extensions/IntegerExtensions.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/engine_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/model_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/ui_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/engine/engine.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/engine/src/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model/model.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model/src/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ui/src/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ui/ui.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/TripsManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/TripsManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Model/CustomExceptions/RoadDoesNotExistException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/CustomExceptions/RoadDoesNotExistException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Model/Enums/RepetitionRate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Enums/RepetitionRate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Model/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Map.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Model/Road.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Road.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Model/Station.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Station.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Model/TripOffer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/TripOffer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Model/TripRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/TripRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Model/TripTiming.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/TripTiming.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UI/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UI/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Transpool/META-INF/Transpool.kotlin_module" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Transpool/Resources/TranspoolTitle.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Engine/Engine.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine/src/engine/Engine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Engine/TripsManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine/src/engine/TripsManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/CustomExceptions/RoadDoesNotExistException.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/CustomExceptions/RoadDoesNotExistException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/Enums/RepetitionRate.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/Enums/RepetitionRate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/Map.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/Road.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/Road.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/Station.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/Station.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/TripOffer.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/TripOffer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/TripRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/TripRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/TripTiming.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/TripTiming.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Resources/TranspoolTitle.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ui/resources/TranspoolTitle.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UI/Input.java" beforeDir="false" afterPath="$PROJECT_DIR$/ui/src/ui/Input.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UI/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/ui/src/ui/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UI/Output.java" beforeDir="false" afterPath="$PROJECT_DIR$/ui/src/ui/Output.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UI/TranspoolConsole.java" beforeDir="false" afterPath="$PROJECT_DIR$/ui/src/ui/TranspoolConsole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Enums/UserAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/Enums/UserAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Interfaces/IEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/Interfaces/IEngine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/util/Extensions/IntegerExtensions.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/Extensions/IntegerExtensions.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,17 +71,22 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="extract.method.default.visibility" value="private" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/out/artifacts/MoveToSubmitDir.bat" />
+    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.externalTools" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\USER1\Documents\GitHub\Transpool\Transpool\ui" />
       <recent name="C:\Users\USER1\IdeaProjects\Transpool\src\Resources" />
     </key>
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="UI.Main" />
-      <module name="Transpool" />
+      <option name="MAIN_CLASS_NAME" value="ui.Main" />
+      <module name="ui" />
       <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Run" />
       <method v="2">
@@ -93,7 +117,9 @@
       <workItem from="1586589411116" duration="13000" />
       <workItem from="1587314962757" duration="1577000" />
       <workItem from="1587317075146" duration="526000" />
-      <workItem from="1587317769071" duration="11248000" />
+      <workItem from="1587317769071" duration="11876000" />
+      <workItem from="1587376795545" duration="10250000" />
+      <workItem from="1587404386642" duration="1213000" />
     </task>
     <servers />
   </component>
@@ -101,14 +127,26 @@
     <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1587326323631">
+    <state x="199" y="0" key="#Project_Structure" timestamp="1587378038928">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1587326323631" />
+    <state x="199" y="0" key="#Project_Structure/0.0.1536.824@0.0.1536.824" timestamp="1587378038928" />
+    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1587401400782">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1587401400782" />
+    <state x="568" y="275" width="498" height="273" key="#com.intellij.ide.actionMacro.EditMacrosDialog" timestamp="1587403722889">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="568" y="275" width="498" height="273" key="#com.intellij.ide.actionMacro.EditMacrosDialog/0.0.1536.824@0.0.1536.824" timestamp="1587403722889" />
     <state x="574" y="96" key="#com.intellij.ide.util.MemberChooser" timestamp="1587328968301">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="574" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1587328968301" />
+    <state x="467" y="203" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1587385170246">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="467" y="203" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1536.824@0.0.1536.824" timestamp="1587385170246" />
     <state x="449" y="148" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1587317094817">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -121,42 +159,54 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="223" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1536.824@0.0.1536.824" timestamp="1587329213268" />
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1587328945850">
+    <state x="640" y="243" width="460" height="495" key="#com.intellij.tools.ToolEditorDialog" timestamp="1587404041990">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1587328945850" />
-    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1587328945850">
+    <state x="640" y="243" width="460" height="495" key="#com.intellij.tools.ToolEditorDialog/0.0.1536.824@0.0.1536.824" timestamp="1587404041990" />
+    <state x="584" y="346" key="#com.intellij.ws.xml.jaxb.GenerateJAXBSchemasFromJavaDialog" timestamp="1587403669002">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1587328945850" />
-    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1587328945850">
+    <state x="584" y="346" key="#com.intellij.ws.xml.jaxb.GenerateJAXBSchemasFromJavaDialog/0.0.1536.824@0.0.1536.824" timestamp="1587403669002" />
+    <state x="647" y="164" key="FileChooserDialogImpl" timestamp="1587402204532">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1587328945850" />
-    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1587328945850">
+    <state x="647" y="164" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1587402204532" />
+    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1587404368078">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1587328945850" />
-    <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1587327321583">
+    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1587404368078" />
+    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1587404368078">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1587327321583" />
-    <state width="1493" height="261" key="GridCell.Tab.1.center" timestamp="1587327321583">
+    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1587404368078" />
+    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1587404368077">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1587327321583" />
-    <state width="1493" height="261" key="GridCell.Tab.1.left" timestamp="1587327321583">
+    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1587404368077" />
+    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1587404368078">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1587327321583" />
-    <state width="1493" height="261" key="GridCell.Tab.1.right" timestamp="1587327321583">
+    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1587404368078" />
+    <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1587329854839">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1587327321583" />
-    <state x="217" y="59" key="SettingsEditor" timestamp="1586184191211">
+    <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1587329854839" />
+    <state width="1493" height="261" key="GridCell.Tab.1.center" timestamp="1587329854839">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="217" y="59" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1586184191211" />
+    <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1587329854839" />
+    <state width="1493" height="261" key="GridCell.Tab.1.left" timestamp="1587329854839">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1587329854839" />
+    <state width="1493" height="261" key="GridCell.Tab.1.right" timestamp="1587329854839">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1587329854839" />
+    <state x="229" y="0" width="1307" height="824" key="SettingsEditor" timestamp="1587404344527">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="229" y="0" width="1307" height="824" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1587404344527" />
     <state x="465" y="236" key="com.intellij.ide.util.TipDialog" timestamp="1587317087482">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -165,6 +215,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="499" y="163" key="extract.method.dialog/0.0.1536.824@0.0.1536.824" timestamp="1587327638394" />
+    <state x="307" y="43" key="new project wizard" timestamp="1587377459065">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="307" y="43" key="new project wizard/0.0.1536.824@0.0.1536.824" timestamp="1587377459065" />
     <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1586425732041">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -174,12 +228,12 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/model/Enums/UserAction.java</url>
+          <url>file://$PROJECT_DIR$/model/src/model/Enums/UserAction.java</url>
           <line>15</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/model/Enums/UserAction.java</url>
+          <url>file://$PROJECT_DIR$/model/src/model/Enums/UserAction.java</url>
           <line>11</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>

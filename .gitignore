@@ -40,3 +40,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+Transpool/out/artifacts/MoveToSubmitDir.bat
+Transpool/Submit/StartTranspool.bat
