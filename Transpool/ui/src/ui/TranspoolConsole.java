@@ -4,12 +4,13 @@ import engine.Engine;
 import model.Enums.UserAction;
 import model.Interfaces.IEngine;
 
-import static ui.Input.getUserActionInput;
-import static ui.Output.*;
+import static ui.UserActions.readXmlFileDialog;
+import static ui.util.Input.getUserActionInput;
+import static ui.util.Output.*;
 
 public class TranspoolConsole {
 
-    private static IEngine TranspoolEngine = new Engine();
+    public static IEngine engine = new Engine();
 
     public static void start() {
         greetUser();
@@ -28,7 +29,7 @@ public class TranspoolConsole {
             } else {
                 switch (action) {
                     case READ_XML_FILE:
-                        System.out.println("Good1");
+                        readXmlFileDialog();
                         break;
                     case POST_TRIP_REQUEST:
                         System.out.println("Good2");
@@ -49,11 +50,4 @@ public class TranspoolConsole {
         }
     }
 
-    /**
-     * Prints the continuation of the dialog with the user according to the specific action
-     */
-    private static void actionDialog() {
-        // TODO Transfer to Output (?)
-        // TODO Create such a method for each possible action
-    }
 }

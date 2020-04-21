@@ -1,4 +1,4 @@
-package ui;
+package ui.util;
 
 import model.Enums.UserAction;
 import model.Extensions.IntegerExtensions;
@@ -6,9 +6,8 @@ import model.Extensions.IntegerExtensions;
 import java.util.Scanner;
 
 public class Input {
-    private static Scanner scanner = new Scanner(System.in);
-
     public static String getUserInput() {
+        Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }
 
@@ -17,6 +16,7 @@ public class Input {
      * @return The UserAction if input is valid. Null otherwise.
      */
     public static UserAction getUserActionInput() {
+        Scanner scanner = new Scanner(System.in);
         String userActionNum = getUserInput();
         Integer parsedInt = IntegerExtensions.tryParseInt(userActionNum);
         if (parsedInt != null) {

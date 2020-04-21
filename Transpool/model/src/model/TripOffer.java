@@ -1,44 +1,26 @@
 package model;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 
 public class TripOffer {
     private String offeringUserName;
     private int passengersQuota;
-    private SortedSet<Station> stationsInTrip;
-    private SortedSet<Road> roadsInTrip;
+    private List<Station> stationsInTrip;
+    private List<Road> roadsInTrip;
     private double pricePerKm;
     private TripTiming timing;
 
-    /*public model.TripOffer(String offeringUserName, int passengersQuota, Set<model.Road> roadsInPath, double pricePreKm, model.TripTiming timing) {
-        this.offeringUserName = offeringUserName;
-        this.passengersQuota = passengersQuota;
-        this.roadsInTrip = roadsInPath;
-        this.pricePerKm = pricePreKm;
-        this.timing = timing;
-
-        InitStationsInTrip();
-    }
-
-    private void InitStationsInTrip() {
-        stationsInTrip = new HashSet<>();
-
-        for (model.Road road : roadsInTrip) {
-            stationsInTrip.add(model.Map.getStationByName(road.getSourceStationName()));
-            stationsInTrip.add(model.Map.getStationByName(road.getDestStationName()));
-        }
-    }*/
-
-    public TripOffer(String offeringUserName, int passengersQuota, SortedSet<Station> stations, double pricePreKm, TripTiming timing) {
+    public TripOffer(String offeringUserName, int passengersQuota, List<Station> stations, double pricePreKm, TripTiming timing) {
         this.offeringUserName = offeringUserName;
         this.passengersQuota = passengersQuota;
         this.pricePerKm = pricePreKm;
         this.timing = timing;
 
-        // TODO check that the roads between the stations exist
         this.stationsInTrip = stations;
-        //this.roadsInTrip = model.Map.getRoadsBetweenStations(stations);
+        //this.roadsInTrip = TODO GENERATE LIST OF ROADS FROM LIST OF STATIONS
     }
 
     //region Getters & Setters
@@ -58,7 +40,7 @@ public class TripOffer {
         this.passengersQuota = passengersQuota;
     }
 
-    public Set<Station> getStationsInTrip() {
+    public List<Station> getStationsInTrip() {
         return stationsInTrip;
     }
 
@@ -110,4 +92,35 @@ public class TripOffer {
     //endregion
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TripOffer)) return false;
+
+        TripOffer tripOffer = (TripOffer) o;
+
+        if (getPassengersQuota() != tripOffer.getPassengersQuota()) return false;
+        if (Double.compare(tripOffer.getPricePerKm(), getPricePerKm()) != 0) return false;
+        if (getOfferingUserName() != null ? !getOfferingUserName().equals(tripOffer.getOfferingUserName()) : tripOffer.getOfferingUserName() != null)
+            return false;
+        if (getStationsInTrip() != null ? !getStationsInTrip().equals(tripOffer.getStationsInTrip()) : tripOffer.getStationsInTrip() != null)
+            return false;
+        if (!Objects.equals(roadsInTrip, tripOffer.roadsInTrip))
+            return false;
+        return getTiming() != null ? getTiming().equals(tripOffer.getTiming()) : tripOffer.getTiming() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = getOfferingUserName() != null ? getOfferingUserName().hashCode() : 0;
+        result = 31 * result + getPassengersQuota();
+        result = 31 * result + (getStationsInTrip() != null ? getStationsInTrip().hashCode() : 0);
+        result = 31 * result + (roadsInTrip != null ? roadsInTrip.hashCode() : 0);
+        temp = Double.doubleToLongBits(getPricePerKm());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (getTiming() != null ? getTiming().hashCode() : 0);
+        return result;
+    }
 }

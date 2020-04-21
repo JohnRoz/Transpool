@@ -9,9 +9,9 @@ public class TripTiming {
     private LocalTime time;
     private RepetitionRate repetitionRate;
 
-    public TripTiming(int day, LocalTime time, RepetitionRate repetitionRate) {
+    public TripTiming(int day, int hour, int minutes, String repetitionRate) {
         this.day = day;
-        this.time = time;
-        this.repetitionRate = repetitionRate;
+        this.time = LocalTime.of(hour, minutes);
+        this.repetitionRate = RepetitionRate.valueOf(repetitionRate);
     }
 }

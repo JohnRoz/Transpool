@@ -12,6 +12,10 @@ public class TripsManager {
     private static Set<TripOffer> offers;
     private static Set<TripRequest> requests;
 
+    public TripsManager(Set<TripOffer> offers) {
+        this.offers = offers;
+    }
+
     public static boolean addOffer() {
         return false;
     }

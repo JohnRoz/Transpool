@@ -3,6 +3,7 @@ package model;
 import model.CustomExceptions.RoadDoesNotExistException;
 
 import javax.naming.OperationNotSupportedException;
+import java.awt.*;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -12,9 +13,18 @@ import java.util.SortedSet;
  */
 public class Map {
 
+    //region Public Constants
+    public static final int MAX_MAP_SCALE = 100;
+    public static final int MIN_MAP_SCALE = 6;
+    public static final int MAX_LENGTH = MAX_MAP_SCALE;
+    public static final int MAX_WIDTH = MAX_MAP_SCALE;
+    public static final int MIN_LENGTH = MIN_MAP_SCALE;
+    public static final int MIN_WIDTH = MIN_MAP_SCALE;
+    //endregion
+
     //region Non-static constants
-    final int HEIGHT;
-    final int WIDTH;
+    private final int LENGTH;
+    private final int WIDTH;
     //endregion
 
     //region Members
@@ -27,8 +37,8 @@ public class Map {
     //endregion
 
     //region Ctor
-    private Map(int height, int width, Set<Road> roads, Set<Station> stations) {
-        HEIGHT = height;
+    private Map(int length, int width, Set<Station> stations, Set<Road> roads) {
+        LENGTH = length;
         WIDTH = width;
         this.roads = roads;
         this.stations = stations;
@@ -50,37 +60,35 @@ public class Map {
      * the roads and stations sets.
      * Should be called only once at the startup of the app.
      *
-     * @param roads    The list of roads to instantiate the map with.
      * @param stations The list of stations to instantiate the map with.
+     * @param roads    The list of roads to instantiate the map with.
      * @return The instantiated reference to the new model.Map Singleton object
      * @throws OperationNotSupportedException If the model.Map Singleton has been already initialized.
      */
-    public static Map init(int height, int width, Set<Road> roads, Set<Station> stations) throws OperationNotSupportedException {
+    public static Map init(int length, int width, Set<Station> stations, Set<Road> roads)
+            throws OperationNotSupportedException {
         if (instance != null)
-            throw new OperationNotSupportedException();
+            throw new OperationNotSupportedException(
+                    "Map cannot be initialized more than once.\nUse getInstance() to get a reference to the Map instead."
+            );
 
-        return instance = new Map(height, width, roads, stations);
+        return instance = new Map(length, width, stations, roads);
     }
 
-    // TODO Move to TripsManager
-    public static Station getStationByName(String name) {
-        for (Station station :
-                stations) {
-            if (station.getName().equals(name))
-                return station;
-        }
+    public boolean isOnMap(Point point) {
+        int pntWidth = point.x;
+        int pntLength = point.y;
 
-        return null;
+        return pntLength >= 0 && pntLength <= LENGTH &&
+                pntWidth >= 0 && pntWidth <= WIDTH;
     }
 
-    private static boolean doesRoadExist(Road road) {
-        return roads.contains(road);
-    }
+    public static boolean isOnMap(int mapLength, int mapWidth, Point point) {
+        int pntWidth = point.x;
+        int pntLength = point.y;
 
-    // TODO Complete the Mock
-    public static SortedSet<Road> getRoadsBetweenStations(SortedSet<Station> stations) throws RoadDoesNotExistException {
-        //SortedSet<model.Road> roadsBetweenStations = new
-        return null;
+        return pntLength >= 0 && pntLength <= mapLength &&
+                pntWidth >= 0 && pntWidth <= mapWidth;
     }
 
 }
