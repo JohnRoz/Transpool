@@ -2,6 +2,7 @@ package engine.DAL;
 
 import engine.DAL.transpoolXMLSchema.*;
 import engine.TranspoolManager;
+import model.CustomExceptions.FormattedMessageException;
 import model.CustomExceptions.StationDoesNotExistException;
 import model.CustomExceptions.TranspoolXmlValidationException;
 import model.CustomExceptions.UnsupportedFileTypeException;
@@ -350,9 +351,12 @@ public class TranspoolXmlLoader {
         int capacity = trip.getCapacity(), PPK = trip.getPPK();
 
         List<Station> tripStations = null;
+        List<Road> tripRoads = null;
+        String[] stationNames = routePath.split(ROUTE_PATH_SEPARATOR);
         try {
-            tripStations = Station.createStationsFromStrArr(stations, routePath.split(ROUTE_PATH_SEPARATOR));
-        } catch (StationDoesNotExistException e) {
+            tripStations = Station.getStationsFromStrArr(stations, stationNames);
+            tripRoads = Road.getRoadListFromStationsPath(roads, stationNames);
+        } catch (FormattedMessageException e) {
             // Would never happen here since the route path was already checked
             e.printStackTrace();
         }
@@ -364,7 +368,7 @@ public class TranspoolXmlLoader {
 
         TripTiming timing = new TripTiming(day, hour, minute, repetition);
 
-        return new TripOffer(owner, capacity, tripStations, PPK, timing);
+        return new TripOffer(owner, capacity, PPK, timing, tripStations, tripRoads);
     }
     //endregion
 }

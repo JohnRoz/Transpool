@@ -9,42 +9,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1fc94a2c-cb54-481c-9d4e-62b291d54170" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/engine/src/engine/DAL/TranspoolXmlLoader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/engine/src/engine/DAL/TranspoolXmlSerializer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/engine/src/engine/DAL/transpoolXMLSchema/MapBoundries.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/engine/src/engine/DAL/transpoolXMLSchema/MapDescriptor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/engine/src/engine/DAL/transpoolXMLSchema/ObjectFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/engine/src/engine/DAL/transpoolXMLSchema/Path.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/engine/src/engine/DAL/transpoolXMLSchema/Paths.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/engine/src/engine/DAL/transpoolXMLSchema/PlannedTrips.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/engine/src/engine/DAL/transpoolXMLSchema/Route.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/engine/src/engine/DAL/transpoolXMLSchema/Scheduling.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/engine/src/engine/DAL/transpoolXMLSchema/Stop.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/engine/src/engine/DAL/transpoolXMLSchema/Stops.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/engine/src/engine/DAL/transpoolXMLSchema/TransPool.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/engine/src/engine/DAL/transpoolXMLSchema/TransPoolTrip.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/engine/src/engine/TranspoolManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/src/model/CustomExceptions/FormattedMessageException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/src/model/CustomExceptions/StationDoesNotExistException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/src/model/CustomExceptions/TranspoolXmlValidationException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/src/model/CustomExceptions/UnsupportedFileTypeException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/src/model/Extensions/FileExtensions.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ui/src/ui/UserActions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine/src/engine/DAL/TranspoolXmlLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine/src/engine/DAL/TranspoolXmlLoader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/engine/src/engine/Engine.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine/src/engine/Engine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/src/engine/TripsManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine/src/engine/TripsManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/src/model/CustomExceptions/RoadDoesNotExistException.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/CustomExceptions/RoadDoesNotExistException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/src/model/Enums/RepetitionRate.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/Enums/RepetitionRate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/src/model/Interfaces/IEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/Interfaces/IEngine.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/src/model/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/Map.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/src/model/Road.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/Road.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/src/model/Station.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/Station.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/src/model/TripOffer.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/TripOffer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/src/model/TripTiming.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/src/model/TripTiming.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/src/ui/Input.java" beforeDir="false" afterPath="$PROJECT_DIR$/ui/src/ui/util/Input.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/src/ui/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/ui/src/ui/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/src/ui/Output.java" beforeDir="false" afterPath="$PROJECT_DIR$/ui/src/ui/util/Output.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/src/ui/TranspoolConsole.java" beforeDir="false" afterPath="$PROJECT_DIR$/ui/src/ui/TranspoolConsole.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +97,6 @@
       <workItem from="1587376795545" duration="10250000" />
       <workItem from="1587404386642" duration="2764000" />
       <workItem from="1587413601208" duration="27913000" />
-      <workItem from="1587472983758" duration="23069000" />
     </task>
     <servers />
   </component>
@@ -145,10 +116,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="568" y="275" width="498" height="273" key="#com.intellij.ide.actionMacro.EditMacrosDialog/0.0.1536.824@0.0.1536.824" timestamp="1587403722889" />
-    <state x="574" y="96" key="#com.intellij.ide.util.MemberChooser" timestamp="1587496477150">
+    <state x="574" y="96" key="#com.intellij.ide.util.MemberChooser" timestamp="1587501651136">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="574" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1587496477150" />
+    <state x="574" y="96" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1587501651136" />
     <state x="467" y="203" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1587385170246">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -177,38 +148,30 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="647" y="164" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1587402204532" />
-    <state width="1493" height="261" key="GridCell.Tab.0.bottom" timestamp="1587499336447">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1587499336447" />
-    <state width="1493" height="261" key="GridCell.Tab.0.center" timestamp="1587499336446">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1587499336446" />
-    <state width="1493" height="261" key="GridCell.Tab.0.left" timestamp="1587499336446">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1587499336446" />
-    <state width="1493" height="261" key="GridCell.Tab.0.right" timestamp="1587499336447">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1587499336447" />
-    <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1587499359410">
+    <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1587499588893">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1587499359410" />
-    <state width="1493" height="261" key="GridCell.Tab.1.center" timestamp="1587499359410">
+    <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1587499588893" />
+    <state width="1493" height="261" key="GridCell.Tab.1.center" timestamp="1587499588893">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1587499359410" />
-    <state width="1493" height="261" key="GridCell.Tab.1.left" timestamp="1587499359410">
+    <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1587499588893" />
+    <state width="1493" height="261" key="GridCell.Tab.1.left" timestamp="1587499588893">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1587499359410" />
-    <state width="1493" height="261" key="GridCell.Tab.1.right" timestamp="1587499359410">
+    <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1587499588893" />
+    <state width="1493" height="261" key="GridCell.Tab.1.right" timestamp="1587499588893">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1587499359410" />
+    <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1587499588893" />
     <state x="222" y="0" width="1307" height="824" key="SettingsEditor" timestamp="1587480322360">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -231,15 +194,6 @@
     <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1586425732041" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/engine/src/engine/DAL/TranspoolXmlLoader.java</url>
-          <line>236</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
         <watch expression="path" language="JAVA" />

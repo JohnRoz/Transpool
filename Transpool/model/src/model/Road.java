@@ -1,7 +1,9 @@
 package model;
 
-import java.util.Collection;
-import java.util.Objects;
+import model.CustomExceptions.RoadDoesNotExistException;
+import model.CustomExceptions.StationDoesNotExistException;
+
+import java.util.*;
 
 public class Road {
     private String sourceStationName;
@@ -139,6 +141,44 @@ public class Road {
      */
     public static boolean containsRoadBySrcAndDstNames(Collection<Road> roads, String roadSrc, String roadDst) {
         return roads.contains(new Road(roadSrc, roadDst));
+    }
+
+    /**
+     * Iterated over an array of station names and returns a {@link List} of the underlying roads.
+     * @param roads        The pool of available roads.
+     * @param stationNames An array of strings. Each cell contains the name of a {@link Station}
+     *                     that's a part of the full path of travel.
+     * @return A list containing the {@link Road}s mentioned in the path of stations names.
+     */
+    public static List<Road> getRoadListFromStationsPath(Collection<Road> roads, String[] stationNames)
+            throws RoadDoesNotExistException {
+        List<Road> roadsList = new ArrayList<>();
+
+        for (int i = 0; i < stationNames.length - 1; i++) {
+            String srcStationName = stationNames[i].trim();
+            String dstStationName = stationNames[i + 1].trim();
+
+            Road road = Road.getRoadBySrcDst(roads, srcStationName, dstStationName);
+
+            if (road == null)
+                throw new RoadDoesNotExistException(
+                        "Road with source station %s and destination station %s does not exist in collection %s.",
+                        srcStationName, dstStationName, String.join(",", stationNames)
+                );
+            roadsList.add(road);
+        }
+
+        return roadsList;
+    }
+
+    public static Road getRoadBySrcDst(Collection<Road> roads, String scrStation, String dstStation) {
+        for (Road road : roads) {
+            if (road.equals(new Road(scrStation, dstStation))) {
+                return road;
+            }
+        }
+
+        return null;
     }
 
     //endregion

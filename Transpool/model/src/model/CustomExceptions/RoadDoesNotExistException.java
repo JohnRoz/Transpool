@@ -1,11 +1,11 @@
 package model.CustomExceptions;
 
 public class RoadDoesNotExistException extends FormattedMessageException {
-    protected RoadDoesNotExistException(String message) {
+    public RoadDoesNotExistException(String message) {
         super(message);
     }
 
-    protected RoadDoesNotExistException(String message, Object... args) {
+    public RoadDoesNotExistException(String message, Object... args) {
         super(message, args);
     }
 }

@@ -37,8 +37,6 @@ public class Station {
     //endregion
 
 
-
-
 //    @Override
 //    public boolean equals(Object o) {
 //        if (this == o) return true;
@@ -112,11 +110,9 @@ public class Station {
      * @return The wanted station if found, or null if no such station exist in the collection.
      */
     public static Station getStationByName(Collection<Station> stations, String stationToGet) {
-        if (containsStationByName(stations, stationToGet)) {
-            for (Station station : stations) {
-                if (station.getName().equals(stationToGet)) {
-                    return station;
-                }
+        for (Station station : stations) {
+            if (station.getName().equals(stationToGet)) {
+                return station;
             }
         }
 
@@ -133,13 +129,13 @@ public class Station {
     }
 
     /**
-     * Iterated over a {@link Set} of stations and created a
-     * returns a list of the stations mentioned in the array.
+     * Iterated over an array of station names and returns a list of the stations mentioned in the array.
+     *
      * @param stations     The pool of available stations.
      * @param stationNames An array of strings. each cell contains the name of the Station to get from the stations Set.
      * @return A list containing the {@link Station}s mentioned in the names array in order.
      */
-    public static List<Station> createStationsFromStrArr(Collection<Station> stations, String[] stationNames) throws StationDoesNotExistException{
+    public static List<Station> getStationsFromStrArr(Collection<Station> stations, String[] stationNames) throws StationDoesNotExistException {
         List<Station> stationsList = new ArrayList<>();
 
         for (String stationName : stationNames) {
@@ -148,24 +144,12 @@ public class Station {
             if (station == null)
                 throw new StationDoesNotExistException(
                         "Station named %s does not exist in collection %s.",
-                        stationName, getStationsString(stations)
+                        stationName, String.join(",", stationNames)
                 );
             stationsList.add(station);
         }
 
         return stationsList;
-    }
-
-    @Deprecated
-    public static String getStationsString(Collection<Station> stations) {
-        List<String> stationNames = new ArrayList<>();
-
-        for (Station station :
-                stations) {
-            stationNames.add(station.getName());
-        }
-
-        return stations.stream().map(Station::getName).collect(Collectors.joining(","));
     }
 
     //endregion

@@ -21,6 +21,13 @@ public class Engine implements IEngine {
     public void ReadXmlFile(String path)
             throws FileNotFoundException, UnsupportedFileTypeException,
             JAXBException, TranspoolXmlValidationException {
-        TranspoolXmlLoader.Load(path);
+        transpoolManager = TranspoolXmlLoader.Load(path);
+    }
+
+    private void assertEngineInitialized() {
+        if (transpoolManager == null)
+            throw new UnsupportedOperationException(
+                    "The system cannot do anything before you populate it with data.\nLoad an xml file first."
+            );
     }
 }

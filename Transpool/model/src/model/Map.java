@@ -4,6 +4,7 @@ import model.CustomExceptions.RoadDoesNotExistException;
 
 import javax.naming.OperationNotSupportedException;
 import java.awt.*;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -23,8 +24,8 @@ public class Map {
     //endregion
 
     //region Non-static constants
-    private final int LENGTH;
-    private final int WIDTH;
+    public final int LENGTH;
+    public final int WIDTH;
     //endregion
 
     //region Members
@@ -73,6 +74,14 @@ public class Map {
             );
 
         return instance = new Map(length, width, stations, roads);
+    }
+
+    public static Set<Road> getRoads() {
+        return roads;
+    }
+
+    public static Set<Station> getStations() {
+        return stations;
     }
 
     public boolean isOnMap(Point point) {

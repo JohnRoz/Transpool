@@ -2,8 +2,6 @@ package model;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.util.SortedSet;
 
 public class TripOffer {
     private String offeringUserName;
@@ -13,14 +11,13 @@ public class TripOffer {
     private double pricePerKm;
     private TripTiming timing;
 
-    public TripOffer(String offeringUserName, int passengersQuota, List<Station> stations, double pricePreKm, TripTiming timing) {
+    public TripOffer(String offeringUserName, int passengersQuota, double pricePreKm, TripTiming timing, List<Station> stations, List<Road> roads) {
         this.offeringUserName = offeringUserName;
         this.passengersQuota = passengersQuota;
         this.pricePerKm = pricePreKm;
         this.timing = timing;
-
         this.stationsInTrip = stations;
-        //this.roadsInTrip = TODO GENERATE LIST OF ROADS FROM LIST OF STATIONS
+        this.roadsInTrip = roads;
     }
 
     //region Getters & Setters
@@ -65,6 +62,7 @@ public class TripOffer {
 
     /**
      * Sums the duration of travel of every road in the trip, and returns the total amount of time in hours.
+     *
      * @return Duration of trip in hours.
      */
     public double getTripDuration() {
