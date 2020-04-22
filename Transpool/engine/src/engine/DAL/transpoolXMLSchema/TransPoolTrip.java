@@ -17,9 +17,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -35,16 +35,14 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "owner",
-    "capacity",
-    "ppk",
-    "route",
-    "scheduling"
+        "owner",
+        "capacity",
+        "ppk",
+        "route",
+        "scheduling"
 })
 @XmlRootElement(name = "TransPoolTrip")
 public class TransPoolTrip {
@@ -62,11 +60,9 @@ public class TransPoolTrip {
 
     /**
      * Gets the value of the owner property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getOwner() {
         return owner;
@@ -74,11 +70,9 @@ public class TransPoolTrip {
 
     /**
      * Sets the value of the owner property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setOwner(String value) {
         this.owner = value;
@@ -86,7 +80,6 @@ public class TransPoolTrip {
 
     /**
      * Gets the value of the capacity property.
-     * 
      */
     public int getCapacity() {
         return capacity;
@@ -94,7 +87,6 @@ public class TransPoolTrip {
 
     /**
      * Sets the value of the capacity property.
-     * 
      */
     public void setCapacity(int value) {
         this.capacity = value;
@@ -102,7 +94,6 @@ public class TransPoolTrip {
 
     /**
      * Gets the value of the ppk property.
-     * 
      */
     public int getPPK() {
         return ppk;
@@ -110,7 +101,6 @@ public class TransPoolTrip {
 
     /**
      * Sets the value of the ppk property.
-     * 
      */
     public void setPPK(int value) {
         this.ppk = value;
@@ -118,11 +108,9 @@ public class TransPoolTrip {
 
     /**
      * Gets the value of the route property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Route }
-     *     
+     *
+     * @return possible object is
+     * {@link Route }
      */
     public Route getRoute() {
         return route;
@@ -130,11 +118,9 @@ public class TransPoolTrip {
 
     /**
      * Sets the value of the route property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Route }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Route }
      */
     public void setRoute(Route value) {
         this.route = value;
@@ -142,11 +128,9 @@ public class TransPoolTrip {
 
     /**
      * Gets the value of the scheduling property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Scheduling }
-     *     
+     *
+     * @return possible object is
+     * {@link Scheduling }
      */
     public Scheduling getScheduling() {
         return scheduling;
@@ -154,11 +138,9 @@ public class TransPoolTrip {
 
     /**
      * Sets the value of the scheduling property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Scheduling }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Scheduling }
      */
     public void setScheduling(Scheduling value) {
         this.scheduling = value;

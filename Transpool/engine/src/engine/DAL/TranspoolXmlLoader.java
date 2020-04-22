@@ -3,11 +3,11 @@ package engine.DAL;
 import engine.DAL.transpoolXMLSchema.*;
 import engine.TranspoolManager;
 import model.CustomExceptions.FormattedMessageException;
-import model.CustomExceptions.StationDoesNotExistException;
 import model.CustomExceptions.TranspoolXmlValidationException;
 import model.CustomExceptions.UnsupportedFileTypeException;
 import model.*;
 
+import javax.naming.OperationNotSupportedException;
 import javax.xml.bind.JAXBException;
 import java.awt.*;
 import java.io.File;
@@ -68,7 +68,15 @@ public class TranspoolXmlLoader {
         List<TransPoolTrip> xmlTrips = xmlRoot.getPlannedTrips().getTransPoolTrip();
         Set<TripOffer> tripOffers = createTripOffers(stations, roads, xmlTrips);
 
-        return new TranspoolManager(boundaries, stations, roads, tripOffers);
+        // In case the transpoolManager is being recreated (This is not the first file loaded).
+        TranspoolManager.reset();
+        try {
+            return TranspoolManager.init(boundaries, stations, roads, tripOffers);
+        } catch (OperationNotSupportedException e) {
+            // This shouldn't ever happen since a called reset before calling init
+            e.printStackTrace();
+            return TranspoolManager.getInstance();
+        }
     }
 
     //region Technical File Structure Validation

@@ -4,20 +4,24 @@ import engine.Engine;
 import model.Enums.UserAction;
 import model.Interfaces.IEngine;
 
-import static ui.UserActions.readXmlFileDialog;
+import static ui.CommandExecutor.postTripRequestDialog;
+import static ui.CommandExecutor.readXmlFileDialog;
 import static ui.util.Input.getUserActionInput;
 import static ui.util.Output.*;
 
 public class TranspoolConsole {
-
-    public static IEngine engine = new Engine();
 
     public static void start() {
         greetUser();
         printMenu();
         UserAction action = getUserActionInput();
 
-        userDialogLoop(action);
+        try {
+            userDialogLoop(action);
+        } catch (Exception e) {
+            System.out.println("Something unexpected happened...\nHere's the Stack Trace:\n\n");
+            e.printStackTrace();
+        }
 
         System.out.println("Goodbye!");
     }
@@ -32,7 +36,7 @@ public class TranspoolConsole {
                         readXmlFileDialog();
                         break;
                     case POST_TRIP_REQUEST:
-                        System.out.println("Good2");
+                        postTripRequestDialog();
                         break;
                     case GET_ALL_TRIP_OFFERS:
                         System.out.println("Good3");

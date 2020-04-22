@@ -8,7 +8,7 @@ public class IntegerExtensions {
      * @return True if represents an integer. False otherwise.
      */
     public static boolean isIntegerStr(String strNum) {
-        if (strNum == null) {
+        if (strNum == null || strNum.isEmpty()) {
             return false;
         }
         try {

@@ -1,9 +1,10 @@
 package model;
 
 import model.CustomExceptions.RoadDoesNotExistException;
-import model.CustomExceptions.StationDoesNotExistException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class Road {
     private String sourceStationName;
@@ -133,18 +134,30 @@ public class Road {
      * Extension function for {@code Collection<Road>} to check if a collection
      * contains a {@link Road} by its source and destination stations.
      *
-     * @param roads   The {@code Collection<Road>} to search if it contains the specified road.
-     * @param roadSrc The name of the source station of the {@link Road} to be found.
-     * @param roadDst The name of the destination station of the {@link Road} to be found.
+     * @param roads      The {@code Collection<Road>} to search if it contains the specified road.
+     * @param srcStation The name of the source station of the {@link Road} to be found.
+     * @param dstStation The name of the destination station of the {@link Road} to be found.
      * @return True if the collection contains a {@link Road} with the same source and destination
      * as the ones specified. False otherwise.
      */
-    public static boolean containsRoadBySrcAndDstNames(Collection<Road> roads, String roadSrc, String roadDst) {
-        return roads.contains(new Road(roadSrc, roadDst));
+    public static boolean containsRoadBySrcAndDstNames(Collection<Road> roads, String srcStation, String dstStation) {
+        for (Road road : roads) {
+
+            // If the current road has the same src and dst, or if it's not one-way which means
+            // That the given src and dst stations can represent the road's other driving direction
+            if (road.equals(new Road(srcStation, dstStation)) ||
+                    (!road.isOneWay() && road.equals(new Road(dstStation, srcStation)))) {
+                return true;
+            }
+        }
+
+        return false;
+
     }
 
     /**
      * Iterated over an array of station names and returns a {@link List} of the underlying roads.
+     *
      * @param roads        The pool of available roads.
      * @param stationNames An array of strings. Each cell contains the name of a {@link Station}
      *                     that's a part of the full path of travel.
@@ -171,9 +184,13 @@ public class Road {
         return roadsList;
     }
 
-    public static Road getRoadBySrcDst(Collection<Road> roads, String scrStation, String dstStation) {
+    public static Road getRoadBySrcDst(Collection<Road> roads, String srcStation, String dstStation) {
         for (Road road : roads) {
-            if (road.equals(new Road(scrStation, dstStation))) {
+
+            // If the current road has the same src and dst, or if it's not one-way which means
+            // That the given src and dst stations can represent the road's other driving direction
+            if (road.equals(new Road(srcStation, dstStation)) ||
+                    (!road.isOneWay() && road.equals(new Road(dstStation, srcStation)))) {
                 return road;
             }
         }

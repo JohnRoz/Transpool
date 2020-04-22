@@ -1,12 +1,8 @@
 package model;
 
-import model.CustomExceptions.RoadDoesNotExistException;
-
 import javax.naming.OperationNotSupportedException;
 import java.awt.*;
-import java.util.List;
 import java.util.Set;
-import java.util.SortedSet;
 
 /**
  * This is the object that represents the projection of the world
@@ -33,8 +29,8 @@ public class Map {
     // Singleton instance
     private static Map instance;
 
-    private static Set<Road> roads;
-    private static Set<Station> stations;
+    private Set<Road> roads;
+    private Set<Station> stations;
     //endregion
 
     //region Ctor
@@ -70,17 +66,23 @@ public class Map {
             throws OperationNotSupportedException {
         if (instance != null)
             throw new OperationNotSupportedException(
-                    "Map cannot be initialized more than once.\nUse getInstance() to get a reference to the Map instead."
+                    "Map cannot be initialized more than once.\n" +
+                            "Use getInstance() to get a reference to the Map instead.\n" +
+                            "In Order to recreate a Map, you have to call reset() first."
             );
 
         return instance = new Map(length, width, stations, roads);
     }
 
-    public static Set<Road> getRoads() {
+    public static void reset() {
+        instance = null;
+    }
+
+    public Set<Road> getRoads() {
         return roads;
     }
 
-    public static Set<Station> getStations() {
+    public Set<Station> getStations() {
         return stations;
     }
 
@@ -100,4 +102,19 @@ public class Map {
                 pntWidth >= 0 && pntWidth <= mapWidth;
     }
 
+    public boolean hasStation(String stationName) {
+        return Station.containsStationByName(this.stations, stationName);
+    }
+
+    public Station getStation(String stationName) {
+        return Station.getStationByName(this.stations, stationName);
+    }
+
+    public boolean hasRoad(String srcStation, String dstStation) {
+        return Road.containsRoadBySrcAndDstNames(this.roads, srcStation, dstStation);
+    }
+
+    public Road getRoad(String srcStation, String dstStation) {
+        return Road.getRoadBySrcDst(this.roads, srcStation, dstStation);
+    }
 }

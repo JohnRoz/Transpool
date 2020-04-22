@@ -143,8 +143,8 @@ public class Station {
 
             if (station == null)
                 throw new StationDoesNotExistException(
-                        "Station named %s does not exist in collection %s.",
-                        stationName, String.join(",", stationNames)
+                        stationName,
+                        String.join(",", stationNames)
                 );
             stationsList.add(station);
         }
