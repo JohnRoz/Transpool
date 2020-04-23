@@ -2,19 +2,23 @@ package model;
 
 import model.CustomExceptions.RoadDoesNotExistException;
 
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import static java.time.temporal.ChronoUnit.MINUTES;
 
 public class Road {
     private String sourceStationName;
     private String destStationName;
     private boolean isOneWay;
-    private double length; // TODO: Check - Could be an int?
-    private double gasNeededPerKm;
-    private double maxDrivingSpeed;
+    private int length;
+    private int gasNeededPerKm;
+    private int maxDrivingSpeed;
 
-    public Road(String sourceStationName, String destStationName, boolean isOneWay, double length, double gasPerKm, double maxDrivingSpeed) {
+    public Road(String sourceStationName, String destStationName, boolean isOneWay, int length, int gasPerKm, int maxDrivingSpeed) {
         this(sourceStationName, destStationName);
         this.isOneWay = isOneWay;
         this.length = length;
@@ -52,27 +56,27 @@ public class Road {
         isOneWay = oneWay;
     }
 
-    public double getLength() {
+    public int getLength() {
         return length;
     }
 
-    public void setLength(double length) {
+    public void setLength(int length) {
         this.length = length;
     }
 
-    public double getGasNeededPerKm() {
+    public int getGasNeededPerKm() {
         return gasNeededPerKm;
     }
 
-    public void setGasNeededPerKm(double gasNeededPerKm) {
+    public void setGasNeededPerKm(int gasNeededPerKm) {
         this.gasNeededPerKm = gasNeededPerKm;
     }
 
-    public double getMaxDrivingSpeed() {
+    public int getMaxDrivingSpeed() {
         return maxDrivingSpeed;
     }
 
-    public void setMaxDrivingSpeed(double maxDrivingSpeed) {
+    public void setMaxDrivingSpeed(int maxDrivingSpeed) {
         this.maxDrivingSpeed = maxDrivingSpeed;
     }
     //endregion
@@ -103,17 +107,21 @@ public class Road {
     //region Public methods
 
     /**
-     * Receives a road and calculates the time it would take to drive across it (Hours).
+     * Receives a road and calculates the time it would take to drive across it (in minutes).
      *
-     * @param road The model.Road to calculate travel duration of.
-     * @return Amount of hours it would take to drive across the given road.
+     * @param road The {@link Road} to calculate travel duration of.
+     * @return Amount of minutes it would take to drive across the given road.
      */
-    public static double calcRoadTravelDuration(Road road) {
-        return road.getLength() / road.getMaxDrivingSpeed();
+    public static long calcRoadTravelDuration(Road road) {
+        double timeInHours = (double)road.getLength() / road.getMaxDrivingSpeed();
+        int fullHours = (int)Math.floor(timeInHours);
+        int minutes = (int)Math.round((timeInHours - fullHours) * 60);
+
+        return MINUTES.between(LocalTime.MIDNIGHT, LocalTime.of(fullHours, minutes));
     }
 
-    public static double sumRoadsLength(Collection<? extends Road> roads) {
-        double lengthSum = 0;
+    public static int sumRoadsLength(Collection<? extends Road> roads) {
+        int lengthSum = 0;
         for (Road road : roads) {
             lengthSum += road.getLength();
         }
@@ -121,8 +129,8 @@ public class Road {
         return lengthSum;
     }
 
-    public static double sumRoadsNeededGas(Collection<? extends Road> roads) {
-        double gasSum = 0;
+    public static int sumRoadsNeededGas(Collection<? extends Road> roads) {
+        int gasSum = 0;
         for (Road road : roads) {
             gasSum += road.getGasNeededPerKm() * road.getLength();
         }

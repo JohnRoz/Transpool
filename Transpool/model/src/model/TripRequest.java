@@ -3,23 +3,32 @@ package model;
 import java.time.LocalTime;
 
 public class TripRequest {
+    private static int ID = 0;
+
+    private final int id;
     private User requestingUser;
-    private String wantedSourceStationName;
-    private String wantedDestStationName;
+    private Station wantedSourceStation;
+    private Station wantedDestStation;
     private int wantedTripStartDay;
     private LocalTime wantedTripStartTime;
     private int wantedTripEndDay;
     private LocalTime wantedTripEndTime;
     boolean doesUserAgreeToStationExchange;
+    boolean isMatched;
 
     public TripRequest(User requestingUser, String wantedSourceStationName, String wantedDestStationName, LocalTime wantedTripStartTime) {
+        this.id = ++ID;
         this.requestingUser = requestingUser;
-        this.wantedSourceStationName = wantedSourceStationName;
-        this.wantedDestStationName = wantedDestStationName;
+        this.wantedSourceStation = Map.getInstance().getStation(wantedSourceStationName);
+        this.wantedDestStation = Map.getInstance().getStation(wantedDestStationName);
         this.wantedTripStartTime = wantedTripStartTime;
+        this.isMatched = false;
     }
 
     //region Getters & Setters
+    public int getId() {
+        return id;
+    }
 
     public User getRequestingUser() {
         return requestingUser;
@@ -29,20 +38,20 @@ public class TripRequest {
         this.requestingUser = requestingUser;
     }
 
-    public String getWantedSourceStationName() {
-        return wantedSourceStationName;
+    public Station getWantedSourceStation() {
+        return wantedSourceStation;
     }
 
-    public void setWantedSourceStationName(String wantedSourceStationName) {
-        this.wantedSourceStationName = wantedSourceStationName;
+    public void setWantedSourceStation(Station wantedSourceStation) {
+        this.wantedSourceStation = wantedSourceStation;
     }
 
-    public String getWantedDestStationName() {
-        return wantedDestStationName;
+    public Station getWantedDestStation() {
+        return wantedDestStation;
     }
 
-    public void setWantedDestStationName(String wantedDestStationName) {
-        this.wantedDestStationName = wantedDestStationName;
+    public void setWantedDestStation(Station wantedDestStation) {
+        this.wantedDestStation = wantedDestStation;
     }
 
     public LocalTime getWantedTripStartTime() {
@@ -52,6 +61,15 @@ public class TripRequest {
     public void setWantedTripStartTime(LocalTime wantedTripStartTime) {
         this.wantedTripStartTime = wantedTripStartTime;
     }
+
+    public boolean isMatched() {
+        return isMatched;
+    }
+
+    public void setMatched(boolean matched) {
+        this.isMatched = matched;
+    }
+
     //endregion
 
     //region Equals & hashCode Overrides
@@ -64,9 +82,9 @@ public class TripRequest {
 
         if (getRequestingUser() != null ? !getRequestingUser().equals(that.getRequestingUser()) : that.getRequestingUser() != null)
             return false;
-        if (getWantedSourceStationName() != null ? !getWantedSourceStationName().equals(that.getWantedSourceStationName()) : that.getWantedSourceStationName() != null)
+        if (getWantedSourceStation() != null ? !getWantedSourceStation().equals(that.getWantedSourceStation()) : that.getWantedSourceStation() != null)
             return false;
-        if (getWantedDestStationName() != null ? !getWantedDestStationName().equals(that.getWantedDestStationName()) : that.getWantedDestStationName() != null)
+        if (getWantedDestStation() != null ? !getWantedDestStation().equals(that.getWantedDestStation()) : that.getWantedDestStation() != null)
             return false;
         return getWantedTripStartTime() != null ? getWantedTripStartTime().equals(that.getWantedTripStartTime()) : that.getWantedTripStartTime() == null;
     }
@@ -74,8 +92,8 @@ public class TripRequest {
     @Override
     public int hashCode() {
         int result = getRequestingUser() != null ? getRequestingUser().hashCode() : 0;
-        result = 31 * result + (getWantedSourceStationName() != null ? getWantedSourceStationName().hashCode() : 0);
-        result = 31 * result + (getWantedDestStationName() != null ? getWantedDestStationName().hashCode() : 0);
+        result = 31 * result + (getWantedSourceStation() != null ? getWantedSourceStation().hashCode() : 0);
+        result = 31 * result + (getWantedDestStation() != null ? getWantedDestStation().hashCode() : 0);
         result = 31 * result + (getWantedTripStartTime() != null ? getWantedTripStartTime().hashCode() : 0);
         return result;
     }

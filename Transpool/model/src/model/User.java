@@ -1,8 +1,12 @@
 package model;
 
+import java.util.Collection;
 import java.util.Objects;
 
 public class User {
+    private static int ID = 0;
+
+    private final int id;
     private String name;
     private double balance;
 
@@ -12,12 +16,15 @@ public class User {
     }
 
     public User(String name, double balance) {
+        this.id = ++ID;
         this.name = name;
         this.balance = balance;
     }
     //endregion
 
     //region Getters & Setters
+    public int getId() { return id; }
+
     public String getName() {
         return name;
     }
@@ -45,23 +52,36 @@ public class User {
 
         User user = (User) o;
 
+        if (getId() != user.getId()) return false;
         return getName() != null ? getName().equals(user.getName()) : user.getName() == null;
     }
 
     @Override
     public int hashCode() {
-        return getName() != null ? getName().hashCode() : 0;
+        int result = getId();
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        return result;
     }
+
 
     //endregion
 
-    // TODO: Complete Mocks
+    //region Public Methods
 
-    public void OfferTrip() {
-
+    //region Static Methods
+    public static boolean hasUserById(Collection<? extends User> users, int id) {
+        return getUserById(users, id) != null;
     }
 
-    public Object RequestTrip() {
+    public static User getUserById(Collection<? extends User> users, int id) {
+        for (User user : users) {
+            if (user.getId() == id)
+                return user;
+        }
+
         return null;
     }
+    //endregion
+
+    //endregion
 }
