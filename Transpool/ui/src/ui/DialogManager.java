@@ -87,9 +87,7 @@ public class DialogManager {
         printfln("Arrival time: %1$tH:%1$tM O'clock.", offer.getArrivalTime());
         printfln("Remaining passengers capacity: %d", offer.getRemainingPassengersCapacity());
         printUserSwitchesInTrip(offer);
-
-        // TODO: CHECK THIS IS ACTUALLY WHAT WE WERE ASKED FOR
-        printfln("Average gas usage: %1.3f Liters", offer.getAvgGasUsage());
+        printfln("Average gas usage: %1.3f Km per Liter.", offer.getAvgGasUsage());
     }
 
     // TODO: CHECK THAT THIS ACTUALLY WORKS WHEN I HAVE SUFFICIENT DATA TO POPULATE THE SYSTEM WITH
@@ -140,7 +138,7 @@ public class DialogManager {
         printfln("Arrival time: %1$tH:%1$tM O'clock.", request.getArrivalTime());
 
         // TODO: CHECK THIS IS ACTUALLY WHAT WE WERE ASKED FOR
-        printfln("Average gas usage: %1.3f Liters", request.getAvgGasUsage());
+        printfln("Average gas usage: %1.3f Km per Liter.", request.getAvgGasUsage());
     }
     //endregion
 

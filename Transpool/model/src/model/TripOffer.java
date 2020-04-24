@@ -2,7 +2,6 @@ package model;
 
 import model.Enums.UserTransitionType;
 import model.Interfaces.IdentifiableTranspoolEntity;
-import model.Interfaces.TranspoolEntity;
 
 import java.time.LocalTime;
 import java.util.*;
@@ -192,7 +191,7 @@ public class TripOffer implements IdentifiableTranspoolEntity {
     }
 
     public double getAvgGasUsage() {
-        return (double) Road.sumRoadsNeededGas(roadsInTrip) / roadsInTrip.size();
+        return (double) Road.sumRoadsKmPerGasLiter(roadsInTrip) / roadsInTrip.size();
     }
     //endregion
 

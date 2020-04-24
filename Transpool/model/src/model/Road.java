@@ -1,8 +1,9 @@
 package model;
 
 import model.CustomExceptions.RoadDoesNotExistException;
+import model.Interfaces.TranspoolEntity;
 
-import java.time.Duration;
+import java.security.InvalidParameterException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,19 +11,19 @@ import java.util.List;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
 
-public class Road {
+public class Road implements TranspoolEntity {
     private String sourceStationName;
     private String destStationName;
     private boolean isOneWay;
     private int length;
-    private int gasNeededPerKm;
+    private int kmPerGasLiter;
     private int maxDrivingSpeed;
 
-    public Road(String sourceStationName, String destStationName, boolean isOneWay, int length, int gasPerKm, int maxDrivingSpeed) {
+    public Road(String sourceStationName, String destStationName, boolean isOneWay, int length, int kmPerGasLiter, int maxDrivingSpeed) {
         this(sourceStationName, destStationName);
         this.isOneWay = isOneWay;
         this.length = length;
-        this.gasNeededPerKm = gasPerKm;
+        this.kmPerGasLiter = kmPerGasLiter;
         this.maxDrivingSpeed = maxDrivingSpeed;
     }
 
@@ -36,48 +37,24 @@ public class Road {
         return sourceStationName;
     }
 
-    public void setSourceStationName(String sourceStationName) {
-        this.sourceStationName = sourceStationName;
-    }
-
     public String getDestStationName() {
         return destStationName;
-    }
-
-    public void setDestStationName(String destStationName) {
-        this.destStationName = destStationName;
     }
 
     public boolean isOneWay() {
         return isOneWay;
     }
 
-    public void setOneWay(boolean oneWay) {
-        isOneWay = oneWay;
-    }
-
     public int getLength() {
         return length;
     }
 
-    public void setLength(int length) {
-        this.length = length;
-    }
-
-    public int getGasNeededPerKm() {
-        return gasNeededPerKm;
-    }
-
-    public void setGasNeededPerKm(int gasNeededPerKm) {
-        this.gasNeededPerKm = gasNeededPerKm;
+    public int getKmPerGasLiter() {
+        return kmPerGasLiter;
     }
 
     public int getMaxDrivingSpeed() {
         return maxDrivingSpeed;
-    }
-
-    public void setMaxDrivingSpeed(int maxDrivingSpeed) {
-        this.maxDrivingSpeed = maxDrivingSpeed;
     }
     //endregion
 
@@ -113,9 +90,9 @@ public class Road {
      * @return Amount of minutes it would take to drive across the given road.
      */
     public static long calcRoadTravelDuration(Road road) {
-        double timeInHours = (double)road.getLength() / road.getMaxDrivingSpeed();
-        int fullHours = (int)Math.floor(timeInHours);
-        int minutes = (int)Math.round((timeInHours - fullHours) * 60);
+        double timeInHours = (double) road.getLength() / road.getMaxDrivingSpeed();
+        int fullHours = (int) Math.floor(timeInHours);
+        int minutes = (int) Math.round((timeInHours - fullHours) * 60);
 
         return MINUTES.between(LocalTime.MIDNIGHT, LocalTime.of(fullHours, minutes));
     }
@@ -129,10 +106,10 @@ public class Road {
         return lengthSum;
     }
 
-    public static int sumRoadsNeededGas(Collection<? extends Road> roads) {
+    public static int sumRoadsKmPerGasLiter(Collection<? extends Road> roads) {
         int gasSum = 0;
         for (Road road : roads) {
-            gasSum += road.getGasNeededPerKm() * road.getLength();
+            gasSum += road.getKmPerGasLiter();
         }
 
         return gasSum;
@@ -148,7 +125,7 @@ public class Road {
      * @return True if the collection contains a {@link Road} with the same source and destination
      * as the ones specified. False otherwise.
      */
-    public static boolean containsRoadBySrcAndDstNames(Collection<Road> roads, String srcStation, String dstStation) {
+    public static boolean containsRoadBySrcAndDstNames(Collection<? extends Road> roads, String srcStation, String dstStation) {
         for (Road road : roads) {
 
             // If the current road has the same src and dst, or if it's not one-way which means
@@ -161,6 +138,10 @@ public class Road {
 
         return false;
 
+    }
+
+    public static boolean containsRoad(Collection<? extends Road> roads, Road toCheck) {
+        return containsRoadBySrcAndDstNames(roads, toCheck.sourceStationName, toCheck.destStationName);
     }
 
     /**
@@ -205,6 +186,60 @@ public class Road {
 
         return null;
     }
+
+    public static boolean containsStation(Collection<Road> roads, String stationName) {
+        for (Road road : roads) {
+            String srcStation = road.sourceStationName;
+            String dstStation = road.destStationName;
+
+            if (stationName.equals(srcStation) ||
+                    stationName.equals(dstStation))
+                return true;
+        }
+
+        return false;
+    }
+
+    public static List<Road> getSubPath(List<Road> path, String wantedSrcStation, String wantedDstStation) {
+        if (!containsStation(path, wantedSrcStation))
+            throw new InvalidParameterException(
+                    "Specified path does not contain station " + wantedSrcStation + ".");
+        if (!containsStation(path, wantedDstStation))
+            throw new InvalidParameterException(
+                    "Specified path does not contain station " + wantedDstStation + ".");
+//        if (!Road.isPathPossible(path, ))
+//            throw new InvalidParameterException(
+//                    "There is no way to get from " + wantedSrcStation + " to " + wantedDstStation + ".");
+
+        List<Road> subPath = new ArrayList<>();
+        boolean isInSubPathRange = false;
+
+        // Populate sub-path
+        for (Road road : path) {
+            String src = road.sourceStationName;
+            String dst = road.destStationName;
+
+            if (isInSubPathRange) {
+                subPath.add(road);
+                if (dst.equals(wantedDstStation))
+                    break;
+            }
+
+            if (src.equals(wantedSrcStation) || src.equals(wantedDstStation)) {
+                subPath.add(road);
+                isInSubPathRange = true;
+            }
+        }
+
+        return subPath;
+    }
+
+//    private static boolean isPathPossible(Collection<Road> roads, String srcStation, String dstStation) {
+//
+//        for (Road road : roads) {
+//
+//        }
+//    }
 
     //endregion
 }

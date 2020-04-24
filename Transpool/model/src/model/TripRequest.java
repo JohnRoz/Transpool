@@ -130,7 +130,7 @@ public class TripRequest implements IdentifiableTranspoolEntity {
         if (!isMatched())
             return 0;
 
-        return Road.sumRoadsNeededGas(getTravelPath());
+        return Road.sumRoadsKmPerGasLiter(getTravelPath());
     }
 
     public int getTripPrice() {
@@ -170,7 +170,7 @@ public class TripRequest implements IdentifiableTranspoolEntity {
         if (travelPath == null)
             return 0;
 
-        return Road.sumRoadsNeededGas(travelPath) / travelPath.size();
+        return (double) Road.sumRoadsKmPerGasLiter(travelPath) / travelPath.size();
     }
     //endregion
 }
