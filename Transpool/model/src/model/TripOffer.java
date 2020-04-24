@@ -1,12 +1,14 @@
 package model;
 
 import model.Enums.UserTransitionType;
+import model.Interfaces.IdentifiableTranspoolEntity;
+import model.Interfaces.TranspoolEntity;
 
 import java.time.LocalTime;
 import java.util.*;
 import java.util.Map;
 
-public class TripOffer {
+public class TripOffer implements IdentifiableTranspoolEntity {
 
     //region Static members
     private static int ID = 0;
@@ -38,6 +40,7 @@ public class TripOffer {
 
     //region Getters & Setters
 
+    @Override
     public int getId() {
         return id;
     }
@@ -60,6 +63,10 @@ public class TripOffer {
 
     public List<Station> getStationsInTrip() {
         return stationsInTrip;
+    }
+
+    public List<Road> getRoadsInTrip() {
+        return roadsInTrip;
     }
 
     public int getPricePerKm() {

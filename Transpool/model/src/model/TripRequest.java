@@ -1,8 +1,11 @@
 package model;
 
-import java.time.LocalTime;
+import model.Interfaces.IdentifiableTranspoolEntity;
 
-public class TripRequest {
+import java.time.LocalTime;
+import java.util.List;
+
+public class TripRequest implements IdentifiableTranspoolEntity {
     private static int ID = 0;
 
     private final int id;
@@ -13,8 +16,9 @@ public class TripRequest {
     private LocalTime wantedTripStartTime;
     private int wantedTripEndDay;
     private LocalTime wantedTripEndTime;
-    boolean doesUserAgreeToStationExchange;
-    boolean isMatched;
+    private boolean doesUserAgreeToStationExchange;
+    private TripOffer matchedTo;
+
 
     public TripRequest(User requestingUser, String wantedSourceStationName, String wantedDestStationName, LocalTime wantedTripStartTime) {
         this.id = ++ID;
@@ -22,10 +26,11 @@ public class TripRequest {
         this.wantedSourceStation = Map.getInstance().getStation(wantedSourceStationName);
         this.wantedDestStation = Map.getInstance().getStation(wantedDestStationName);
         this.wantedTripStartTime = wantedTripStartTime;
-        this.isMatched = false;
+        this.matchedTo = null;
     }
 
     //region Getters & Setters
+    @Override
     public int getId() {
         return id;
     }
@@ -62,12 +67,12 @@ public class TripRequest {
         this.wantedTripStartTime = wantedTripStartTime;
     }
 
-    public boolean isMatched() {
-        return isMatched;
+    public TripOffer getMatchedTo() {
+        return matchedTo;
     }
 
-    public void setMatched(boolean matched) {
-        this.isMatched = matched;
+    public void setMatchedTo(TripOffer tripOffer) {
+        this.matchedTo = tripOffer;
     }
 
     //endregion
@@ -96,6 +101,76 @@ public class TripRequest {
         result = 31 * result + (getWantedDestStation() != null ? getWantedDestStation().hashCode() : 0);
         result = 31 * result + (getWantedTripStartTime() != null ? getWantedTripStartTime().hashCode() : 0);
         return result;
+    }
+    //endregion
+
+    //region Public Methods
+    public boolean isMatched() {
+        return getMatchedTo() != null;
+    }
+
+    /**
+     *
+     * If the request is not matched this returns null.
+     * @return A sub path from the path of the matched {@link TripOffer}.
+     * If no {@link TripOffer} is matched, returns null
+     */
+    private List<Road> getTravelPath() {
+        if (!isMatched())
+            return null;
+
+        return Road.getSubPath(
+                getMatchedTo().getRoadsInTrip(),
+                getWantedSourceStation().getName(),
+                getWantedDestStation().getName()
+        );
+    }
+
+    public double getTravelPathNeededGas() {
+        if (!isMatched())
+            return 0;
+
+        return Road.sumRoadsNeededGas(getTravelPath());
+    }
+
+    public int getTripPrice() {
+        if (!isMatched())
+            return 0;
+
+        return Road.sumRoadsLength(getTravelPath()) * getMatchedTo().getPricePerKm();
+    }
+
+    public LocalTime getArrivalTime() {
+        if (!isMatched())
+            return null;
+
+        LocalTime arrivalTime = getMatchedTo().getTiming().getTime().plusMinutes(getTripDuration());
+        return TripTiming.roundTime(arrivalTime);
+    }
+
+    /**
+     * Sums the duration of travel of every road in the trip, and returns the
+     * total amount of time in minutes.
+     *
+     * @return Duration of trip in minutes.
+     */
+    private long getTripDuration() {
+        long totalDuration = 0;
+
+        for (Road road : getTravelPath()) {
+            totalDuration += Road.calcRoadTravelDuration(road);
+        }
+
+        return totalDuration;
+    }
+
+    public double getAvgGasUsage() {
+        List<Road> travelPath = getTravelPath();
+
+        if (travelPath == null)
+            return 0;
+
+        return Road.sumRoadsNeededGas(travelPath) / travelPath.size();
     }
     //endregion
 }

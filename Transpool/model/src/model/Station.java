@@ -1,13 +1,15 @@
 package model;
 
 import model.CustomExceptions.StationDoesNotExistException;
+import model.Interfaces.NamedTranspoolEntity;
+import model.Interfaces.TranspoolEntity;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Station {
+public class Station implements NamedTranspoolEntity {
     private String name;
     private Point coordinate;
 
@@ -19,6 +21,7 @@ public class Station {
     //endregion
 
     //region Getters & Setters
+    @Override
     public String getName() {
         return name;
     }
@@ -35,23 +38,6 @@ public class Station {
         this.coordinate = coordinate;
     }
     //endregion
-
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (!(o instanceof Station)) return false;
-//
-//        Station station = (Station) o;
-//
-//        return (getCoordinate() != null ? getCoordinate().equals(station.getCoordinate()) : station.getCoordinate() == null) ||
-//                (getName() != null ? getName().equals(station.getName()) : station.getName() == null);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(getName(), getCoordinate());
-//    }
 
     @Override
     public boolean equals(Object o) {
@@ -119,6 +105,10 @@ public class Station {
         return null;
     }
 
+    public static Station getStationByName(String stationToGet) {
+        return getStationByName(Map.getInstance().getStations(), stationToGet);
+    }
+
     public static Station getStationByCoordinate(Collection<Station> stations, int x, int y) {
         for (Station station : stations) {
             if (station.getCoordinate().equals(new Point(x, y)))
@@ -152,5 +142,21 @@ public class Station {
         return stationsList;
     }
 
+    public static List<Station> getStationsInPath(List<Road> path) {
+        List<Station> sources =
+                path.stream()
+                        .map(road -> Station.getStationByName(road.getSourceStationName()))
+                        .collect(Collectors.toList());
+        List<Station> destinations =
+                path.stream()
+                        .map(road -> Station.getStationByName(road.getDestStationName()))
+                        .collect(Collectors.toList());
+
+        List<Station> allStations = new ArrayList<>();
+        allStations.add(sources.get(0));
+        allStations.addAll(destinations);
+
+        return allStations;
+    }
     //endregion
 }

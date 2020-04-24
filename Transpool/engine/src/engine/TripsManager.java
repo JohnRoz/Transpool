@@ -18,8 +18,16 @@ public class TripsManager {
         this.requests = new HashSet<>();
     }
 
+    public Set<TripOffer> getOffers() {
+        return offers;
+    }
+
     public boolean addOffer(TripOffer offer) {
-        return false;
+        return offers.add(offer);
+    }
+
+    public Set<TripRequest> getRequests() {
+        return requests;
     }
 
     public boolean addRequest(TripRequest req) {

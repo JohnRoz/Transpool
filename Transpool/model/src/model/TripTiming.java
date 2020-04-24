@@ -1,10 +1,11 @@
 package model;
 
 import model.Enums.RepetitionRate;
+import model.Interfaces.TranspoolEntity;
 
 import java.time.LocalTime;
 
-public class TripTiming {
+public class TripTiming implements TranspoolEntity {
 
     private static final int ROUND_MINUTES_TO_PRODUCT_OF = 5;
 

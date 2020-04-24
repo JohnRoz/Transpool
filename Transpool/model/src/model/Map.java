@@ -29,8 +29,8 @@ public class Map {
     // Singleton instance
     private static Map instance;
 
-    private Set<Road> roads;
-    private Set<Station> stations;
+    private final Set<Road> roads;
+    private final Set<Station> stations;
     //endregion
 
     //region Ctor

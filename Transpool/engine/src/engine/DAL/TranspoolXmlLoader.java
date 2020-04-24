@@ -242,12 +242,17 @@ public class TranspoolXmlLoader {
             boolean isOneWay = path.isOneWay();
             int pathLen = path.getLength(), fuelCons = path.getFuelConsumption(), speedLim = path.getSpeedLimit();
 
-            if (!roads.add(new Road(srcStation, dstStation, isOneWay, pathLen, fuelCons, speedLim))) {
+            Road newRoad = new Road(srcStation, dstStation, isOneWay, pathLen, fuelCons, speedLim);
+
+            // Check if the set already contains the new road (considers cases of two-way roads)
+            if (Road.containsRoad(roads, newRoad)) {
                 throw new TranspoolXmlValidationException(
-                        "A road with the same source and destination, %s and %s, already exist in the system",
+                        "A road between these two stations, %s and %s, already exist in the system.",
                         srcStation, dstStation
                 );
             }
+
+            roads.add(newRoad);
         }
 
         return roads;

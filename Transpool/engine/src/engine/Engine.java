@@ -1,15 +1,13 @@
 package engine;
 
 import engine.DAL.TranspoolXmlLoader;
+import model.*;
 import model.CustomExceptions.StationDoesNotExistException;
 import model.CustomExceptions.TranspoolXmlValidationException;
 import model.CustomExceptions.UnsupportedFileTypeException;
 import model.CustomExceptions.UserAlreadyExistsException;
 import model.Interfaces.IEngine;
-import model.Map;
-import model.Station;
-import model.TripRequest;
-import model.User;
+import model.Interfaces.TranspoolEntity;
 import sun.swing.plaf.synth.DefaultSynthStyle;
 
 import javax.naming.OperationNotSupportedException;
@@ -56,6 +54,7 @@ public class Engine implements IEngine {
     public void postTripRequest(String userName, String srcStation, String dstStation, int hour, int minutes) throws OperationNotSupportedException, StationDoesNotExistException, DateTimeException {
         assertEngineInitialized();
         assertStationsExist(srcStation, dstStation);
+
         User reqOwner = null;
         try {
             reqOwner = transpoolManager.hasUser(userName)
@@ -70,5 +69,17 @@ public class Engine implements IEngine {
                 new TripRequest(reqOwner, srcStation, dstStation, LocalTime.of(hour, minutes));
 
         transpoolManager.getTripsManager().addRequest(tripRequest);
+    }
+
+    @Override
+    public Collection<TripOffer> getAllTripOffers() throws OperationNotSupportedException {
+        assertEngineInitialized();
+        return transpoolManager.getTripsManager().getOffers();
+    }
+
+    @Override
+    public Collection<TripRequest> getAllTripRequests() throws OperationNotSupportedException {
+        assertEngineInitialized();
+        return transpoolManager.getTripsManager().getRequests();
     }
 }

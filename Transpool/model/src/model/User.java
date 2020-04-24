@@ -1,9 +1,13 @@
 package model;
 
+import model.Interfaces.IdentifiableTranspoolEntity;
+import model.Interfaces.NamedTranspoolEntity;
+import model.Interfaces.TranspoolEntity;
+
 import java.util.Collection;
 import java.util.Objects;
 
-public class User {
+public class User implements NamedTranspoolEntity, IdentifiableTranspoolEntity {
     private static int ID = 0;
 
     private final int id;
@@ -23,8 +27,10 @@ public class User {
     //endregion
 
     //region Getters & Setters
+    @Override
     public int getId() { return id; }
 
+    @Override
     public String getName() {
         return name;
     }
