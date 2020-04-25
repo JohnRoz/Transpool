@@ -187,6 +187,11 @@ public class Road implements TranspoolEntity {
         return null;
     }
 
+    private static void assertContainsStation(List<Road> path, String wantedStation) {
+        if (!containsStation(path, wantedStation))
+            throw new InvalidParameterException(
+                    "Specified path does not contain station " + wantedStation + ".");
+    }
     public static boolean containsStation(Collection<Road> roads, String stationName) {
         for (Road road : roads) {
             String srcStation = road.sourceStationName;
@@ -201,12 +206,9 @@ public class Road implements TranspoolEntity {
     }
 
     public static List<Road> getSubPath(List<Road> path, String wantedSrcStation, String wantedDstStation) {
-        if (!containsStation(path, wantedSrcStation))
-            throw new InvalidParameterException(
-                    "Specified path does not contain station " + wantedSrcStation + ".");
-        if (!containsStation(path, wantedDstStation))
-            throw new InvalidParameterException(
-                    "Specified path does not contain station " + wantedDstStation + ".");
+        assertContainsStation(path, wantedSrcStation);
+        assertContainsStation(path, wantedDstStation);
+
 //        if (!Road.isPathPossible(path, ))
 //            throw new InvalidParameterException(
 //                    "There is no way to get from " + wantedSrcStation + " to " + wantedDstStation + ".");

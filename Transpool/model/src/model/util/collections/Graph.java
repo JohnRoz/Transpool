@@ -2,82 +2,95 @@ package model.util.collections;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
- * *** WARNING! This class is not Thread-Safe!! ***
- * @param <T> Type Parameter for the vertices of the graph.
- * @param <K> Type Parameter for the edges of the graph.
+ * *** WARNING! This class is NOT Thread-Safe!! ***
+ * @param <T> Type Parameter for the vertices of the graph. Must override equals() & hashCode()
+ * @param <K> Type Parameter for the edges of the graph. Must override equals() & hashCode()
  * @author Jonathan Rozenblat
  */
 public class Graph<T, K> {
-    private final Map<Vertex<T, K>, List<Vertex<T, K>>> adjacencyList = new HashMap<>();
-    private final Set<Edge<T, K>> edgesPool = new HashSet<>();
-    //region Add Vertex
-    public void addVertex(T toAdd) {
-        addVertex(new Vertex<>(toAdd));
-    }
+    private final Map<T, Vertex<T, K>> vertexMap = new HashMap<>();
 
-    private void addVertex(Vertex<T, K> toAdd) {
-        adjacencyList.putIfAbsent(toAdd, new ArrayList<>());
+    //region Mutate Graph
+    public void addVertex(T toAdd) {
+        vertexMap.putIfAbsent(toAdd, new Vertex<>(toAdd));
     }
-    //endregion
 
     public void removeVertex(T toRemove) {
-        Vertex<T, K> v = getVertexByItem(toRemove);
-        if (v != null) {
-            // Remove v's reference from from the lists that point to it
-            adjacencyList.values().forEach(verticesList -> verticesList.remove(v));
+        if (vertexMap.containsKey(toRemove)) {
+            Vertex<T, K> v = vertexMap.remove(toRemove);
 
             // Remove the literal edges that point to v
-            adjacencyList.keySet().forEach(vertex -> vertex.outwardEdges.removeIf(edge -> edge.dest.equals(v)));
-
-            // Remove v from the list
-            adjacencyList.remove(v);
+            //vertexMap.values().forEach(vertex -> vertex.outwardEdges.removeIf(edge -> edge.dest.equals(v)));
+            vertexMap.values().forEach(vertex -> vertex.removeEdgeTo(v));
             v.destroy();
         }
     }
 
     public void addEdge(T src, T dst, K weight, boolean isBiDirectional) {
-        Vertex<T, K> srcVertex = new Vertex<>(src);
-        Vertex<T, K> dstVertex = new Vertex<>(dst);
+        if (!vertexMap.containsKey(src))
+            addVertex(src);
 
-        if (!adjacencyList.containsKey(srcVertex))
-            addVertex(srcVertex);
+        if (!vertexMap.containsKey(dst))
+            addVertex(dst);
 
-        if (!adjacencyList.containsKey(dstVertex))
-            addVertex(dstVertex);
+        Vertex<T, K> srcVertex = vertexMap.get(src);
+        Vertex<T, K> dstVertex = vertexMap.get(dst);
 
-        srcVertex = getVertexByItem(src);
-        dstVertex = getVertexByItem(dst);
-
-        adjacencyList.get(srcVertex).add(dstVertex);
         srcVertex.addEdge(dstVertex, weight, isBiDirectional);
-
-        if (isBiDirectional)
-            adjacencyList.get(dstVertex).add(srcVertex);
     }
 
     public void removeEdge(K toRemove) {
-        //TODO: REMOVE THE VERTEX FROM THE VERTICES LIST!!
-        adjacencyList.values().forEach(verticesList -> verticesList.remove(v));
-        adjacencyList.keySet().forEach(vertex -> vertex.removeEdge(toRemove));
+        vertexMap.values().forEach(vertex -> vertex.removeEdge(toRemove));
     }
 
-    private void removeEdgesFromEndpoint(Vertex<T, K> endpoint) {
-        endpoint.getOutwardEdges().clear();
+    private void clearEdgesFromEndpoint(Vertex<T, K> endpoint) {
+        endpoint.clearEdges();
+    }
+    //endregion
+
+    //region Getters
+    public Set<T> getVertices() {
+        return vertexMap.keySet();
     }
 
-    private Vertex<T, K> getVertexByItem(T item) {
-        Vertex<T, K> toFind = new Vertex<>(item);
+    public Set<K> getEdges() {
+        Set<K> weights = new HashSet<>();
 
-        if (adjacencyList.containsKey(toFind))
-            for (Vertex<T, K> vertex : adjacencyList.keySet()) {
-                if (vertex.equals(toFind))
-                    return vertex;
-            }
+        vertexMap.values().forEach(vertex -> {
+            weights.addAll(
+                    // Get edges of vertex
+                    vertex.getOutwardEdges()
+                            // Get weights of edges
+                            .stream().map(Edge::getWeight)
+                            .collect(Collectors.toSet())
+            );
+        });
+
+        return weights;
+    }
+    //endregion
+
+    // TODO: Complete Mocks
+    //region Query Graph
+    public boolean doesPathExist(T from, T to) {
+        // If at least one of the vertices do not exist
+        if (!vertexMap.containsKey(from) || !vertexMap.containsKey(to))
+            return false;
+
+        return getPath(from, to) != null;
+    }
+
+    public Object getPath(T from, T to) {
+        // If at least one of the vertices do not exist
+        if (!vertexMap.containsKey(from) || !vertexMap.containsKey(to))
+            return null;
 
         return null;
     }
+    //endregion
 
     private static class Vertex<T, K>{
         private T item;
@@ -91,7 +104,7 @@ public class Graph<T, K> {
         public void destroy() {
             item = null;
 
-            for (Edge<T, K> edge : outwardEdges) {
+            for (Edge<T, K> edge : getOutwardEdges()) {
                 edge.disconnect();
             }
 
@@ -107,13 +120,17 @@ public class Graph<T, K> {
         }
 
         private void addEdge(Vertex<T, K> to, K edgeValue) {
-            outwardEdges.add(new Edge<>(to, edgeValue));
+            getOutwardEdges().add(new Edge<>(to, edgeValue));
         }
         //endregion
 
+        public void removeEdgeTo(Vertex<T, K> vertex) {
+            getOutwardEdges().removeIf(edge -> edge.getDest().equals(vertex));
+        }
+
         public void removeEdge(K edgeToRemove) {
             Edge<T, K> toRemove = new Edge<>(null, edgeToRemove);
-            outwardEdges.remove(toRemove);
+            getOutwardEdges().remove(toRemove);
         }
 
         public void clearEdges() {
@@ -122,7 +139,7 @@ public class Graph<T, K> {
 
         private Edge<T, K> getEdgeByWeight(K weight) {
             Edge<T, K> toGet = new Edge<>(null, weight);
-            for (Edge<T, K> outwardEdge : outwardEdges) {
+            for (Edge<T, K> outwardEdge : getOutwardEdges()) {
                 if (outwardEdge.equals(toGet))
                     return outwardEdge;
             }
