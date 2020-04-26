@@ -7,6 +7,7 @@ import java.security.InvalidParameterException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
@@ -209,10 +210,6 @@ public class Road implements TranspoolEntity {
         assertContainsStation(path, wantedSrcStation);
         assertContainsStation(path, wantedDstStation);
 
-//        if (!Road.isPathPossible(path, ))
-//            throw new InvalidParameterException(
-//                    "There is no way to get from " + wantedSrcStation + " to " + wantedDstStation + ".");
-
         List<Road> subPath = new ArrayList<>();
         boolean isInSubPathRange = false;
 
@@ -222,12 +219,12 @@ public class Road implements TranspoolEntity {
             String dst = road.destStationName;
 
             if (isInSubPathRange) {
-                subPath.add(road);
-                if (dst.equals(wantedDstStation))
+                if (src.equals(wantedDstStation))
                     break;
+                subPath.add(road);
             }
 
-            if (src.equals(wantedSrcStation) || src.equals(wantedDstStation)) {
+            if (src.equals(wantedSrcStation)) {
                 subPath.add(road);
                 isInSubPathRange = true;
             }
@@ -235,13 +232,6 @@ public class Road implements TranspoolEntity {
 
         return subPath;
     }
-
-//    private static boolean isPathPossible(Collection<Road> roads, String srcStation, String dstStation) {
-//
-//        for (Road road : roads) {
-//
-//        }
-//    }
 
     //endregion
 }

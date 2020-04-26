@@ -149,6 +149,14 @@ public class TripOffer implements IdentifiableTranspoolEntity {
         return basePassengersCapacity - registeredRequests.size();
     }
 
+    public LocalTime getWhenAtStation(Station station) {
+        if (!getStationsInTrip().contains(station))
+            return null;
+
+        LocalTime arrivalTime = this.getTiming().getTime().plusMinutes(getTripDuration(station));
+        return TripTiming.roundTime(arrivalTime);
+    }
+
     public Set<User> getRegisteredUsers() {
         Set<User> registeredUsers = new HashSet<>();
 
@@ -193,6 +201,10 @@ public class TripOffer implements IdentifiableTranspoolEntity {
     public double getAvgGasUsage() {
         return (double) Road.sumRoadsKmPerGasLiter(roadsInTrip) / roadsInTrip.size();
     }
+
+    public void registerRequest(TripRequest request) {
+        registeredRequests.add(request);
+    }
     //endregion
 
     //region Private methods
@@ -206,7 +218,23 @@ public class TripOffer implements IdentifiableTranspoolEntity {
     private long getTripDuration() {
         long totalDuration = 0;
 
-        for (Road road : roadsInTrip) {
+        for (Road road : getRoadsInTrip()) {
+            totalDuration += Road.calcRoadTravelDuration(road);
+        }
+
+        return totalDuration;
+    }
+
+    private long getTripDuration(Station toStation) {
+        if (!getStationsInTrip().contains(toStation))
+            throw new IllegalArgumentException();
+
+        long totalDuration = 0;
+
+        for (Road road : getRoadsInTrip()) {
+            if (road.getSourceStationName().equals(toStation.getName()))
+                break;
+
             totalDuration += Road.calcRoadTravelDuration(road);
         }
 

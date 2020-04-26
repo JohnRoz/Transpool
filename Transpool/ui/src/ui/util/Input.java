@@ -46,6 +46,11 @@ public class Input {
         return parsedToInt;
     }
 
+    public static int getIntInput(String prompt) throws InvalidInputException {
+        System.out.println(prompt);
+        return getIntInput();
+    }
+
     public static String getNonEmptyStringInput() throws InvalidInputException {
         String userInput = getUserInput();
 
@@ -53,5 +58,10 @@ public class Input {
             throw new InvalidInputException("Cannot receive empty input.");
 
         return userInput;
+    }
+
+    public static String getNonEmptyStringInput(String prompt) throws InvalidInputException {
+        System.out.println(prompt);
+        return getNonEmptyStringInput();
     }
 }

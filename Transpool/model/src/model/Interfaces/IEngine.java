@@ -12,6 +12,7 @@ import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.time.DateTimeException;
 import java.util.Collection;
+import java.util.List;
 
 public interface IEngine {
     void readXmlFile(String path)
@@ -24,4 +25,8 @@ public interface IEngine {
     Collection<TripOffer> getAllTripOffers() throws OperationNotSupportedException;
 
     Collection<TripRequest> getAllTripRequests() throws OperationNotSupportedException;
+
+    List<TripOffer> getAllMatchedToRequest(TripRequest request) throws OperationNotSupportedException;
+
+    void matchTripRequestToOffer(TripRequest request, TripOffer SelectedMatch) throws OperationNotSupportedException;
 }

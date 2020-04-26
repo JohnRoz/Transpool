@@ -1,6 +1,5 @@
 package ui;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import engine.Engine;
 import model.CustomExceptions.FormattedMessageException;
 import model.CustomExceptions.InvalidInputException;
@@ -12,7 +11,6 @@ import model.Station;
 import model.TripOffer;
 import model.TripRequest;
 import model.User;
-import ui.util.Output;
 
 import javax.naming.OperationNotSupportedException;
 import javax.xml.bind.JAXBException;
@@ -63,22 +61,16 @@ public class DialogManager {
         return tripOffers;
     }
 
-    private static List<TripRequest> getAllTripRequests() {
-        List<TripRequest> tripRequests;
-        try {
-            tripRequests = engine.getAllTripRequests().stream()
-                    .sorted(Comparator.comparingInt(TripRequest::getId))
-                    .collect(Collectors.toList());
-        } catch (OperationNotSupportedException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
+    private static List<TripRequest> getAllTripRequests() throws OperationNotSupportedException {
+        List<TripRequest> tripRequests = engine.getAllTripRequests().stream()
+                .sorted(Comparator.comparingInt(TripRequest::getId))
+                .collect(Collectors.toList());
 
         return tripRequests;
     }
 
     private static void printFormattedTripOffers(TripOffer offer) {
-        printfln("Offer number %d.", offer.getId());
+        printfln("Offer number %d:", offer.getId());
         printfln("The trip organizer's name is %s.", offer.getOfferingUserName());
         System.out.print("The path of the trip is: ");
         printStationsPath(offer.getStationsInTrip());
@@ -90,7 +82,6 @@ public class DialogManager {
         printfln("Average gas usage: %1.3f Km per Liter.", offer.getAvgGasUsage());
     }
 
-    // TODO: CHECK THAT THIS ACTUALLY WORKS WHEN I HAVE SUFFICIENT DATA TO POPULATE THE SYSTEM WITH
     private static void printUserSwitchesInTrip(TripOffer offer) {
         if (offer.getStationsToStopInWithUsersAndStatus().keySet().isEmpty()) {
             printfln("No passengers are registered to this trip.");
@@ -108,24 +99,18 @@ public class DialogManager {
 
             Map<User, UserTransitionType> user2status = switches.get(station);
             for (User user : user2status.keySet()) {
-                sb.append("\tUser number").append(user.getId())
+                sb.append("\tUser number ").append(user.getId())
                         .append(", named ").append(user.getName())
                         .append(" is ").append(user2status.get(user)
                         .name().toLowerCase()).append("\n");
             }
-
-            sb.append("\n");
         }
 
         System.out.println(sb.toString());
     }
 
     private static void printFormattedTripRequests(TripRequest request) {
-        printfln("Request number %d.", request.getId());
-        printfln("The requesting user's name is %s.", request.getRequestingUser().getName());
-        printfln("Origin: %s", request.getWantedSourceStation().getName());
-        printfln("Destination: %s", request.getWantedDestStation().getName());
-        printfln("Wanted departure time: %1$tH:%1$tM O'clock.", request.getWantedTripStartTime());
+        printFormattedUnmatchedTripRequest(request);
 
         if (!request.isMatched()) {
             System.out.println("This trip request is not matched to any offer.");
@@ -136,9 +121,46 @@ public class DialogManager {
         printfln("The driver's name is %s.", request.getMatchedTo().getOfferingUserName());
         printfln("The price of the trip is %d ILS.", request.getTripPrice());
         printfln("Arrival time: %1$tH:%1$tM O'clock.", request.getArrivalTime());
-
-        // TODO: CHECK THIS IS ACTUALLY WHAT WE WERE ASKED FOR
         printfln("Average gas usage: %1.3f Km per Liter.", request.getAvgGasUsage());
+    }
+
+    private static void printFormattedUnmatchedTripRequest(TripRequest request) {
+        printfln("Request number %d.", request.getId());
+        printfln("The requesting user's name is %s.", request.getRequestingUser().getName());
+        printfln("Origin: %s", request.getWantedSourceStation().getName());
+        printfln("Destination: %s", request.getWantedDestStation().getName());
+        printfln("Wanted departure time: %1$tH:%1$tM O'clock.", request.getWantedTripStartTime());
+    }
+
+    private static List<TripRequest> getUnmatchedTripRequests() {
+        List<TripRequest> allRequests = null;
+        try {
+            allRequests = getAllTripRequests();
+        } catch (OperationNotSupportedException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        if (allRequests == null || allRequests.isEmpty()) {
+            printfln("There are no trip requests in the system.");
+            return null;
+        }
+
+        return allRequests.stream()
+                .filter(request -> !request.isMatched())
+                .collect(Collectors.toList());
+    }
+
+    private static void printMatchesDetails(TripRequest request, List<TripOffer> matches, int maxMatchesToPresent) {
+        for (int i = 0; i < maxMatchesToPresent && i < matches.size(); i++) {
+            TripOffer match = matches.get(i);
+            printfln("Trip offer number %d:", match.getId());
+            printfln("\tThe trip organizer's name is %s.", match.getOfferingUserName());
+            printfln("\tThe price of the trip is %d ILS.", TripRequest.getTripPrice(request, match));
+            printfln("\tArrival time: %1$tH:%1$tM O'clock.", TripRequest.getArrivalTime(request, match));
+            printfln("\tAverage gas usage: %1.3f Km per Liter.", TripRequest.getAvgGasUsage(request, match));
+            System.out.println();
+        }
     }
     //endregion
 
@@ -162,21 +184,16 @@ public class DialogManager {
 
         final String EXCEPTION_MSG = "\nThe post process failed.\n";
         try {
-            System.out.println("\nPlease enter your name:");
-            String owner = getNonEmptyStringInput();
+            String owner = getNonEmptyStringInput("\nPlease enter your name:");
+            String srcStation = getNonEmptyStringInput(
+                    "Please enter the name of the station you would like to depart from:"
+            );
+            String dstStation = getNonEmptyStringInput(
+                    "Please enter the name of your destination station:"
+            );
 
-            System.out.println("Please enter the name of the station you would like to depart from:");
-            String srcStation = getNonEmptyStringInput();
-
-            System.out.println("Please enter the name of your destination station:");
-            String dstStation = getNonEmptyStringInput();
-
-            System.out.println("When would you like to depart?");
-            System.out.print("Hour (0-23):\t");
-            int deptHour = getIntInput();
-
-            System.out.print("Minute (Would be rounded to the closest product of 5):\t");
-            int deptMinute = getIntInput();
+            int deptHour = getIntInput("When would you like to depart?\nHour (0-23):\t");
+            int deptMinute = getIntInput("Minute (Would be rounded to the closest product of 5):\t");
 
             engine.postTripRequest(owner, srcStation, dstStation, deptHour, deptMinute);
             System.out.println("Your Trip Request has been posted!\n");
@@ -198,6 +215,9 @@ public class DialogManager {
         if (tripOffers == null)
             return;
 
+        if (tripOffers.isEmpty())
+            printfln("There are no trip offers in the system.");
+
         for (TripOffer tripOffer : tripOffers) {
             printFormattedTripOffers(tripOffer);
             System.out.println();
@@ -205,14 +225,91 @@ public class DialogManager {
     }
 
     public static void printAllTripRequestsDialog() {
-        List<TripRequest> tripRequests = getAllTripRequests();
+        List<TripRequest> tripRequests = null;
+        try {
+            tripRequests = getAllTripRequests();
+        } catch (OperationNotSupportedException e) {
+            System.out.println(e.getMessage());
+        }
 
         if (tripRequests == null)
             return;
+
+        if (tripRequests.isEmpty())
+            printfln("There are no trip requests in the system.");
 
         for (TripRequest tripRequest : tripRequests) {
             printFormattedTripRequests(tripRequest);
             System.out.println();
         }
+    }
+
+    public static void matchTripRequestToOfferDialog() {
+        List<TripRequest> requests = getUnmatchedTripRequests();
+        if (requests == null)
+            return;
+
+        // Show the user all the unmatched trip requests.
+        for (TripRequest request : requests) {
+            printFormattedUnmatchedTripRequest(request);
+            System.out.println();
+        }
+
+        // Select trip request
+        int selectedRequestId;
+        int maxMatchesWanted;
+        List<TripOffer> matches;
+        List<TripRequest> chosenRequest;
+
+        try {
+            selectedRequestId = getIntInput("Select the request you want to match to an offer:");
+            maxMatchesWanted = getIntInput("Enter the max number of matches you would like to get for this request.");
+            chosenRequest =
+                    requests.stream()
+                            .filter(request -> request.getId() == selectedRequestId)
+                            .collect(Collectors.toList());
+            if (chosenRequest.isEmpty()) {
+                System.out.println("There are no requests with that id.");
+                return;
+            }
+            matches = engine.getAllMatchedToRequest(chosenRequest.get(0));
+        } catch (InvalidInputException | OperationNotSupportedException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+
+        if (matches.isEmpty()) {
+            System.out.println("There are no matches for that request.");
+            return;
+        }
+
+        printMatchesDetails(chosenRequest.get(0), matches, maxMatchesWanted);
+        List<Integer> matchesIds = matches.stream().map(TripOffer::getId).collect(Collectors.toList());
+
+        int selectedMatchId;
+        try {
+            selectedMatchId = getIntInput("Choose your preferred match by their ID or enter 0 to cancel:");
+        } catch (InvalidInputException e) {
+            System.out.println("There are no requests with that id.");
+            return;
+        }
+
+        if (selectedMatchId == 0)
+            return;
+
+        if (!matchesIds.contains(selectedMatchId)) {
+            System.out.println("There are no matches with that id.");
+            return;
+        }
+
+        TripOffer match = matches.stream().filter(offer -> offer.getId() == selectedMatchId).collect(Collectors.toList()).get(0);
+        try {
+            engine.matchTripRequestToOffer(chosenRequest.get(0), match);
+        } catch (OperationNotSupportedException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+
+        System.out.println("Match has been committed!");
     }
 }

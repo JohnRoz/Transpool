@@ -216,7 +216,7 @@ public class TranspoolXmlLoader {
         if (Station.isStationOverlappingAnother(stations, x, y))
             throw new TranspoolXmlValidationException(
                     "Cannot add station %s to coordinate (%d, %d) since this coordinate is occupied by station %s.",
-                    stopName, x, y, Station.getStationByCoordinate(stations, x, y)
+                    stopName, x, y, Station.getStationByCoordinate(stations, x, y).getName()
             );
     }
 

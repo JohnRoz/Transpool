@@ -7,8 +7,6 @@ import model.CustomExceptions.TranspoolXmlValidationException;
 import model.CustomExceptions.UnsupportedFileTypeException;
 import model.CustomExceptions.UserAlreadyExistsException;
 import model.Interfaces.IEngine;
-import model.Interfaces.TranspoolEntity;
-import sun.swing.plaf.synth.DefaultSynthStyle;
 
 import javax.naming.OperationNotSupportedException;
 import javax.xml.bind.JAXBException;
@@ -16,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.time.DateTimeException;
 import java.time.LocalTime;
 import java.util.Collection;
+import java.util.List;
 
 import static engine.InputValidation.InputValidation.assertStationsExist;
 
@@ -32,7 +31,7 @@ public class Engine implements IEngine {
         if (transpoolManager == null)
             throw new OperationNotSupportedException(
                     "The action cannot be completed since the system has no data.\n" +
-                            "Try loading a Transpool™ xml file first."
+                            "Try loading a Transpool™ xml file first.\n"
             );
     }
     //endregion
@@ -81,5 +80,17 @@ public class Engine implements IEngine {
     public Collection<TripRequest> getAllTripRequests() throws OperationNotSupportedException {
         assertEngineInitialized();
         return transpoolManager.getTripsManager().getRequests();
+    }
+
+    @Override
+    public List<TripOffer> getAllMatchedToRequest(TripRequest request) throws OperationNotSupportedException {
+        assertEngineInitialized();
+        return transpoolManager.getTripsManager().getPossibleMatches(request);
+    }
+
+    @Override
+    public void matchTripRequestToOffer(TripRequest request, TripOffer selectedMatch) throws OperationNotSupportedException {
+        assertEngineInitialized();
+        transpoolManager.getTripsManager().matchRequestToOffer(request, selectedMatch);
     }
 }

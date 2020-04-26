@@ -104,11 +104,7 @@ public class TripRequest implements IdentifiableTranspoolEntity {
     }
     //endregion
 
-    //region Public Methods
-    public boolean isMatched() {
-        return getMatchedTo() != null;
-    }
-
+    //region Private Methods
     /**
      *
      * If the request is not matched this returns null.
@@ -119,33 +115,7 @@ public class TripRequest implements IdentifiableTranspoolEntity {
         if (!isMatched())
             return null;
 
-        return Road.getSubPath(
-                getMatchedTo().getRoadsInTrip(),
-                getWantedSourceStation().getName(),
-                getWantedDestStation().getName()
-        );
-    }
-
-    public double getTravelPathNeededGas() {
-        if (!isMatched())
-            return 0;
-
-        return Road.sumRoadsKmPerGasLiter(getTravelPath());
-    }
-
-    public int getTripPrice() {
-        if (!isMatched())
-            return 0;
-
-        return Road.sumRoadsLength(getTravelPath()) * getMatchedTo().getPricePerKm();
-    }
-
-    public LocalTime getArrivalTime() {
-        if (!isMatched())
-            return null;
-
-        LocalTime arrivalTime = getMatchedTo().getTiming().getTime().plusMinutes(getTripDuration());
-        return TripTiming.roundTime(arrivalTime);
+        return getTravelPath(this, getMatchedTo());
     }
 
     /**
@@ -155,22 +125,90 @@ public class TripRequest implements IdentifiableTranspoolEntity {
      * @return Duration of trip in minutes.
      */
     private long getTripDuration() {
+        if (!isMatched())
+            return 0;
+
+        return getTripDuration(this, getMatchedTo());
+    }
+
+    //region Private Static methods
+    private static List<Road> getTravelPath(TripRequest request, TripOffer match) {
+        if (match == null || request == null)
+            return null;
+
+        return Road.getSubPath(
+                match.getRoadsInTrip(),
+                request.getWantedSourceStation().getName(),
+                request.getWantedDestStation().getName()
+        );
+    }
+
+    private static long getTripDuration(TripRequest request, TripOffer match) {
+        if (match == null || request == null)
+            return 0;
+
         long totalDuration = 0;
 
-        for (Road road : getTravelPath()) {
+        for (Road road : getTravelPath(request, match)) {
             totalDuration += Road.calcRoadTravelDuration(road);
         }
 
         return totalDuration;
     }
+    //endregion
+
+    //endregion
+
+    //region Public Methods
+    public boolean isMatched() {
+        return getMatchedTo() != null;
+    }
+
+    public int getTripPrice() {
+        if (!isMatched())
+            return 0;
+
+        return getTripPrice(this, getMatchedTo());
+    }
+
+    public LocalTime getArrivalTime() {
+        if (!isMatched())
+            return null;
+
+        return getArrivalTime(this, getMatchedTo());
+    }
 
     public double getAvgGasUsage() {
-        List<Road> travelPath = getTravelPath();
+        if (!isMatched())
+            return 0;
+
+        return getAvgGasUsage(this, getMatchedTo());
+    }
+
+    //region Public Static Methods
+    public static int getTripPrice(TripRequest request,  TripOffer match) {
+        if (request == null || match == null)
+            return 0;
+
+        return Road.sumRoadsLength(getTravelPath(request, match)) * match.getPricePerKm();
+    }
+
+    public static LocalTime getArrivalTime(TripRequest request,  TripOffer match) {
+        if (request == null || match == null)
+            return null;
+
+        LocalTime arrivalTime = match.getTiming().getTime().plusMinutes(getTripDuration(request, match));
+        return TripTiming.roundTime(arrivalTime);
+    }
+
+    public static double getAvgGasUsage(TripRequest request,  TripOffer match) {
+        List<Road> travelPath = getTravelPath(request, match);
 
         if (travelPath == null)
             return 0;
 
         return (double) Road.sumRoadsKmPerGasLiter(travelPath) / travelPath.size();
     }
+    //endregion
     //endregion
 }

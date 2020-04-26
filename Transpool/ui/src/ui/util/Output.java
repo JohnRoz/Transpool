@@ -21,7 +21,7 @@ public class Output {
         System.out.println("2.\tPost a trip request.");
         System.out.println("3.\tGet all trip offers.");
         System.out.println("4.\tGet all trip requests.");
-        System.out.println("5.\tMatch an unmatched trip request to an offer..");
+        System.out.println("5.\tMatch an unmatched trip request to an offer.");
         System.out.println("6.\tExit.");
     }
 
