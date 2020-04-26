@@ -8,10 +8,10 @@ public enum RepetitionRate {
     Monthly;
 
     public static boolean isValueInRange(int val) {
-        return val >= 0 && val < UserAction.values().length;
+        return val >= 0 && val < RepetitionRate.values().length;
     }
 
     public static int getValuesCount() {
-        return UserAction.values().length;
+        return RepetitionRate.values().length;
     }
 }
