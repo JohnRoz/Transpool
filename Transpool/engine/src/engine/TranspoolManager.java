@@ -98,11 +98,30 @@ public class TranspoolManager {
         return createUser(username, 0);
     }
 
+    /**
+     * Receives a username, and checks if it exists.
+     * If it does, return it. Else create a new user with that name and return it.
+     * @param username name of the User to search for.
+     * @return If found - returns the specified user. Otherwise, Returns a newly
+     * created user with the specified name.
+     */
+    public User getUserIfExists(String username) {
+        try {
+            return hasUser(username)
+                    ? getUserByName(username)
+                    : createUser(username);
+        } catch (UserAlreadyExistsException e) {
+            // Won't happen since i checked whether it exists or not before calling createUser()
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public User createUser(String username, double balance) throws UserAlreadyExistsException {
         User newUser = new User(username, balance);
 
         // If the add operation failed
-        if(!users.add(newUser)) {
+        if (!users.add(newUser)) {
             throw new UserAlreadyExistsException(username);
         }
 

@@ -1,8 +1,13 @@
 package model;
 
+import model.CustomExceptions.RoadDoesNotExistException;
+import model.CustomExceptions.StationDoesNotExistException;
+
 import javax.naming.OperationNotSupportedException;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Set;
+import java.util.List;
 
 /**
  * This is the object that represents the projection of the world
@@ -106,15 +111,49 @@ public class Map {
         return Station.containsStationByName(this.stations, stationName);
     }
 
-    public Station getStation(String stationName) {
+    public Station getStation(String stationName) throws StationDoesNotExistException {
         return Station.getStationByName(this.stations, stationName);
+    }
+
+    public Station getStationIfExists(String stationName) {
+        if (hasStation(stationName)) {
+            try {
+                return getStation(stationName);
+            } catch (StationDoesNotExistException e) {
+                // Never happens Since i checked it exist
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
+    public List<Station> getStationsByNames(List<String> stationNames) throws StationDoesNotExistException {
+        List<Station> stations = new ArrayList<>();
+        for (String stationName : stationNames) {
+            stations.add(getStation(stationName));
+        }
+
+        return stations;
     }
 
     public boolean hasRoad(String srcStation, String dstStation) {
         return Road.containsRoadBySrcAndDstNames(this.roads, srcStation, dstStation);
     }
 
-    public Road getRoad(String srcStation, String dstStation) {
+    public Road getRoad(String srcStation, String dstStation) throws RoadDoesNotExistException{
         return Road.getRoadBySrcDst(this.roads, srcStation, dstStation);
+    }
+
+    public List<Road> getRoadsByStationsList(List<Station> stations) throws RoadDoesNotExistException {
+        List<Road> roads = new ArrayList<>();
+        for (int i = 0; i < stations.size() - 1; i++) {
+            Station srcStation = stations.get(i);
+            Station dstStation = stations.get(i + 1);
+
+            roads.add(getRoad(srcStation.getName(), dstStation.getName()));
+        }
+
+        return roads;
     }
 }

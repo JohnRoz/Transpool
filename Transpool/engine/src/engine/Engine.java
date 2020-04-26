@@ -2,10 +2,10 @@ package engine;
 
 import engine.DAL.TranspoolXmlLoader;
 import model.*;
+import model.CustomExceptions.RoadDoesNotExistException;
 import model.CustomExceptions.StationDoesNotExistException;
 import model.CustomExceptions.TranspoolXmlValidationException;
 import model.CustomExceptions.UnsupportedFileTypeException;
-import model.CustomExceptions.UserAlreadyExistsException;
 import model.Interfaces.IEngine;
 
 import javax.naming.OperationNotSupportedException;
@@ -50,24 +50,39 @@ public class Engine implements IEngine {
     }
 
     @Override
+    public Collection<Road> getAllRoads() throws OperationNotSupportedException {
+        assertEngineInitialized();
+        return transpoolManager.getMap().getRoads();
+    }
+
+    @Override
     public void postTripRequest(String userName, String srcStation, String dstStation, int hour, int minutes) throws OperationNotSupportedException, StationDoesNotExistException, DateTimeException {
         assertEngineInitialized();
         assertStationsExist(srcStation, dstStation);
 
-        User reqOwner = null;
-        try {
-            reqOwner = transpoolManager.hasUser(userName)
-                    ? transpoolManager.getUserByName(userName)
-                    : transpoolManager.createUser(userName);
-        } catch (UserAlreadyExistsException e) {
-            e.printStackTrace();
-        }
+        // Assert correct hours and minutes before creating user
+        LocalTime time = LocalTime.of(hour, minutes);
 
-
+        User reqOwner = transpoolManager.getUserIfExists(userName);
         TripRequest tripRequest =
-                new TripRequest(reqOwner, srcStation, dstStation, LocalTime.of(hour, minutes));
+                new TripRequest(reqOwner, srcStation, dstStation, time);
 
         transpoolManager.getTripsManager().addRequest(tripRequest);
+    }
+
+    @Override
+    public void postTripOffer(String user, List<String> stationNames, int day, int hour, int minutes, String repetitionRate, int ppk, int capacity) throws OperationNotSupportedException, StationDoesNotExistException, DateTimeException, RoadDoesNotExistException {
+        assertEngineInitialized();
+        assertStationsExist(stationNames.toArray(new String[0]));
+
+        // Assert correct hours and minutes before creating user
+        TripTiming timing = new TripTiming(day, hour, minutes, repetitionRate);
+        User offOwner = transpoolManager.getUserIfExists(user);
+        List<Station> stations = Map.getInstance().getStationsByNames(stationNames);
+        List<Road> roads = Map.getInstance().getRoadsByStationsList(stations);
+        TripOffer tripOffer = new TripOffer(user, capacity, ppk, timing, stations, roads);
+
+        transpoolManager.getTripsManager().addOffer(tripOffer);
     }
 
     @Override
@@ -80,6 +95,12 @@ public class Engine implements IEngine {
     public Collection<TripRequest> getAllTripRequests() throws OperationNotSupportedException {
         assertEngineInitialized();
         return transpoolManager.getTripsManager().getRequests();
+    }
+
+    @Override
+    public Collection<TripRequest> getUnmatchedTripRequests() throws OperationNotSupportedException {
+        assertEngineInitialized();
+        return transpoolManager.getTripsManager().getUnmatchedRequests();
     }
 
     @Override

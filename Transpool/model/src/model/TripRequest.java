@@ -23,8 +23,8 @@ public class TripRequest implements IdentifiableTranspoolEntity {
     public TripRequest(User requestingUser, String wantedSourceStationName, String wantedDestStationName, LocalTime wantedTripStartTime) {
         this.id = ++ID;
         this.requestingUser = requestingUser;
-        this.wantedSourceStation = Map.getInstance().getStation(wantedSourceStationName);
-        this.wantedDestStation = Map.getInstance().getStation(wantedDestStationName);
+        this.wantedSourceStation = Map.getInstance().getStationIfExists(wantedSourceStationName);
+        this.wantedDestStation = Map.getInstance().getStationIfExists(wantedDestStationName);
         this.wantedTripStartTime = wantedTripStartTime;
         this.matchedTo = null;
     }
@@ -197,7 +197,7 @@ public class TripRequest implements IdentifiableTranspoolEntity {
         if (request == null || match == null)
             return null;
 
-        LocalTime arrivalTime = match.getTiming().getTime().plusMinutes(getTripDuration(request, match));
+        LocalTime arrivalTime = request.getWantedTripStartTime().plusMinutes(getTripDuration(request, match));
         return TripTiming.roundTime(arrivalTime);
     }
 

@@ -43,6 +43,9 @@ public class TranspoolConsole {
             case POST_TRIP_REQUEST:
                 postTripRequestDialog();
                 break;
+            case POST_TRIP_OFFER:
+                postTripOfferDialog();
+                break;
             case GET_ALL_TRIP_OFFERS:
                 printAllTripOffersDialog();
                 break;

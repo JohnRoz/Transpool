@@ -4,6 +4,7 @@ import model.Enums.UserAction;
 import model.Interfaces.IdentifiableTranspoolEntity;
 import model.Interfaces.NamedTranspoolEntity;
 import model.Interfaces.TranspoolEntity;
+import model.Road;
 import model.Station;
 
 import java.util.Collection;
@@ -19,10 +20,19 @@ public class Output {
     public static void printMenu() {
         System.out.println("1.\tUpload map, stations and trip offers data (XML).");
         System.out.println("2.\tPost a trip request.");
-        System.out.println("3.\tGet all trip offers.");
-        System.out.println("4.\tGet all trip requests.");
-        System.out.println("5.\tMatch an unmatched trip request to an offer.");
-        System.out.println("6.\tExit.");
+        System.out.println("3.\tPost a trip offer.");
+        System.out.println("4.\tGet all trip offers.");
+        System.out.println("5.\tGet all trip requests.");
+        System.out.println("6.\tMatch an unmatched trip request to an offer.");
+        System.out.println("7.\tExit.");
+    }
+
+    public static void printRepetitionRates() {
+        System.out.println("1.\tOnce.");
+        System.out.println("2.\tDaily.");
+        System.out.println("3.\tBi-Daily.");
+        System.out.println("4.\tWeekly.");
+        System.out.println("5.\tMonthly.");
     }
 
     public static void printfln(String fmt, Object... args) {
@@ -33,6 +43,15 @@ public class Output {
         System.out.printf(
                 "Invalid input.\nInput can only contain numbers between 0 and %d.\n\n",
                 UserAction.getValuesCount());
+    }
+
+    public static void printRoads(Collection<Road> roads) {
+        for (Road road : roads) {
+            System.out.println(road.getSourceStationName() + " to " + road.getDestStationName() + ".");
+
+            if (!road.isOneWay())
+                System.out.println(road.getDestStationName() + " to " + road.getSourceStationName() + ".");
+        }
     }
 
     public static void printNamedEntities(Collection<? extends NamedTranspoolEntity> namedEntities) {

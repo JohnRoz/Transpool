@@ -1,24 +1,22 @@
 package ui;
 
 import engine.Engine;
+import model.*;
 import model.CustomExceptions.FormattedMessageException;
 import model.CustomExceptions.InvalidInputException;
+import model.CustomExceptions.RoadDoesNotExistException;
 import model.CustomExceptions.StationDoesNotExistException;
 import model.Enums.UserTransitionType;
 import model.Interfaces.IEngine;
+import model.Interfaces.IdentifiableTranspoolEntity;
 import model.Interfaces.NamedTranspoolEntity;
-import model.Station;
-import model.TripOffer;
-import model.TripRequest;
-import model.User;
+import model.Interfaces.TranspoolEntity;
 
 import javax.naming.OperationNotSupportedException;
 import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.time.DateTimeException;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -47,6 +45,20 @@ public class DialogManager {
         return true;
     }
 
+    private static boolean printRoadsSrcAndDst() {
+        Collection<Road> roads;
+        try {
+            roads = engine.getAllRoads();
+        } catch (OperationNotSupportedException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+
+        System.out.println("Available roads:");
+        printRoads(roads);
+        return true;
+    }
+
     private static List<TripOffer> getAllTripOffers() {
         List<TripOffer> tripOffers;
         try {
@@ -62,11 +74,15 @@ public class DialogManager {
     }
 
     private static List<TripRequest> getAllTripRequests() throws OperationNotSupportedException {
-        List<TripRequest> tripRequests = engine.getAllTripRequests().stream()
+        return engine.getAllTripRequests().stream()
                 .sorted(Comparator.comparingInt(TripRequest::getId))
                 .collect(Collectors.toList());
+    }
 
-        return tripRequests;
+    private static List<? extends IdentifiableTranspoolEntity> sortEntitiesById(Collection<? extends IdentifiableTranspoolEntity> entities) {
+        return entities.stream()
+                .sorted(Comparator.comparingInt(IdentifiableTranspoolEntity::getId))
+                .collect(Collectors.toList());
     }
 
     private static void printFormattedTripOffers(TripOffer offer) {
@@ -133,22 +149,20 @@ public class DialogManager {
     }
 
     private static List<TripRequest> getUnmatchedTripRequests() {
-        List<TripRequest> allRequests = null;
+        List<TripRequest> unmatchedRequests;
         try {
-            allRequests = getAllTripRequests();
+            unmatchedRequests = (List<TripRequest>)sortEntitiesById(engine.getUnmatchedTripRequests());
         } catch (OperationNotSupportedException e) {
             System.out.println(e.getMessage());
             return null;
         }
 
-        if (allRequests == null || allRequests.isEmpty()) {
+        if (unmatchedRequests == null || unmatchedRequests.isEmpty()) {
             printfln("There are no trip requests in the system.");
             return null;
         }
 
-        return allRequests.stream()
-                .filter(request -> !request.isMatched())
-                .collect(Collectors.toList());
+        return unmatchedRequests;
     }
 
     private static void printMatchesDetails(TripRequest request, List<TripOffer> matches, int maxMatchesToPresent) {
@@ -164,6 +178,7 @@ public class DialogManager {
     }
     //endregion
 
+    // Command 1 Entry
     public static void readXmlFileDialog() {
         System.out.println("Enter the path for the Transpool file:");
         String path = getUserInput();
@@ -178,6 +193,7 @@ public class DialogManager {
         }
     }
 
+    // Command 2 Entry
     public static void postTripRequestDialog() {
         if (!printStationNames())
             return;
@@ -209,6 +225,44 @@ public class DialogManager {
         }
     }
 
+    // Command 3 Entry
+    public static void postTripOfferDialog() {
+        if (!printStationNames())
+            return;
+
+        if (!printRoadsSrcAndDst())
+            return;
+
+        final String EXCEPTION_MSG = "\nThe post process failed.\n";
+        try {
+            String owner = getNonEmptyStringInput("\nPlease enter your name:");
+            List<String> stationNames = enterStationNames("Enter stations to travel to (Enter 0 to stop):");
+
+            int deptDay = 0;
+            int deptHour = getIntInput("When would you like to depart?\nHour (0-23):\t");
+            int deptMinute = getIntInput("Minute (Would be rounded to the closest product of 5):\t");
+
+            System.out.println("Choose when and if the trip should be repeated (Enter the number of option):");
+            printRepetitionRates();
+            String repetitionRate = getRepetitionRateInput().name();
+            int PPK = getIntInput("Enter your Price Per Km:");
+            int capacity = getIntInput("Enter your vehicle's capacity (don't count the driver):");
+
+            engine.postTripOffer(owner, stationNames, deptDay, deptHour, deptMinute, repetitionRate, PPK, capacity);
+            System.out.println("Your Trip Request has been posted!\n");
+
+        } catch (InvalidInputException | OperationNotSupportedException | StationDoesNotExistException | RoadDoesNotExistException e) {
+            System.out.println(EXCEPTION_MSG + e.getMessage() + '\n');
+        } catch (DateTimeException e) {
+            System.out.println(
+                    EXCEPTION_MSG +
+                            "Invalid input.\n" +
+                            "Hours must be in the range of 0 to 23 and minutes must be in the range of 0 to 59.\n"
+            );
+        }
+    }
+
+    // Command 4 Entry
     public static void printAllTripOffersDialog() {
         List<TripOffer> tripOffers = getAllTripOffers();
 
@@ -224,6 +278,7 @@ public class DialogManager {
         }
     }
 
+    // Command 5 Entry
     public static void printAllTripRequestsDialog() {
         List<TripRequest> tripRequests = null;
         try {
@@ -244,6 +299,7 @@ public class DialogManager {
         }
     }
 
+    // Command 6 Entry
     public static void matchTripRequestToOfferDialog() {
         List<TripRequest> requests = getUnmatchedTripRequests();
         if (requests == null)

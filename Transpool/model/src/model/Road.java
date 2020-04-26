@@ -174,7 +174,7 @@ public class Road implements TranspoolEntity {
         return roadsList;
     }
 
-    public static Road getRoadBySrcDst(Collection<Road> roads, String srcStation, String dstStation) {
+    public static Road getRoadBySrcDst(Collection<Road> roads, String srcStation, String dstStation) throws RoadDoesNotExistException {
         for (Road road : roads) {
 
             // If the current road has the same src and dst, or if it's not one-way which means
@@ -185,7 +185,7 @@ public class Road implements TranspoolEntity {
             }
         }
 
-        return null;
+        throw new RoadDoesNotExistException(srcStation, dstStation);
     }
 
     private static void assertContainsStation(List<Road> path, String wantedStation) {

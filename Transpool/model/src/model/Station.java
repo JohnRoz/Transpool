@@ -95,17 +95,17 @@ public class Station implements NamedTranspoolEntity {
      * @param stationToGet the unique name of the station to get.
      * @return The wanted station if found, or null if no such station exist in the collection.
      */
-    public static Station getStationByName(Collection<Station> stations, String stationToGet) {
+    public static Station getStationByName(Collection<Station> stations, String stationToGet) throws StationDoesNotExistException {
         for (Station station : stations) {
             if (station.getName().equals(stationToGet)) {
                 return station;
             }
         }
 
-        return null;
+        throw new StationDoesNotExistException(stationToGet);
     }
 
-    public static Station getStationByName(String stationToGet) {
+    public static Station getStationByName(String stationToGet) throws StationDoesNotExistException {
         return getStationByName(Map.getInstance().getStations(), stationToGet);
     }
 
@@ -142,21 +142,21 @@ public class Station implements NamedTranspoolEntity {
         return stationsList;
     }
 
-    public static List<Station> getStationsInPath(List<Road> path) {
-        List<Station> sources =
-                path.stream()
-                        .map(road -> Station.getStationByName(road.getSourceStationName()))
-                        .collect(Collectors.toList());
-        List<Station> destinations =
-                path.stream()
-                        .map(road -> Station.getStationByName(road.getDestStationName()))
-                        .collect(Collectors.toList());
-
-        List<Station> allStations = new ArrayList<>();
-        allStations.add(sources.get(0));
-        allStations.addAll(destinations);
-
-        return allStations;
-    }
+//    public static List<Station> getStationsInPath(List<Road> path) {
+//        List<Station> sources =
+//                path.stream()
+//                        .map(road -> Station.getStationByName(road.getSourceStationName()))
+//                        .collect(Collectors.toList());
+//        List<Station> destinations =
+//                path.stream()
+//                        .map(road -> Station.getStationByName(road.getDestStationName()))
+//                        .collect(Collectors.toList());
+//
+//        List<Station> allStations = new ArrayList<>();
+//        allStations.add(sources.get(0));
+//        allStations.addAll(destinations);
+//
+//        return allStations;
+//    }
     //endregion
 }

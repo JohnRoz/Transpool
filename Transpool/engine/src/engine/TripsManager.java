@@ -3,6 +3,7 @@ package engine;
 import model.TripOffer;
 import model.TripRequest;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,12 +29,12 @@ public class TripsManager {
         return offers.add(offer);
     }
 
-    public Set<TripRequest> getRequests() {
-        return requests;
+    public List<TripRequest> getRequests() {
+        return requests.stream().sorted(Comparator.comparingInt(TripRequest::getId)).collect(Collectors.toList());
     }
 
-    public Set<TripRequest> getUnmatchedRequests() {
-        return getRequests().stream().filter(TripRequest::isMatched).collect(Collectors.toSet());
+    public List<TripRequest> getUnmatchedRequests() {
+        return getRequests().stream().filter(request -> !request.isMatched()).collect(Collectors.toList());
     }
 
     public boolean addRequest(TripRequest req) {
