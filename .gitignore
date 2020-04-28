@@ -42,3 +42,4 @@ $RECYCLE.BIN/
 *.lnk
 Transpool/out/artifacts/MoveToSubmitDir.bat
 Transpool/Submit/StartTranspool.bat
+Transpool/Submit/readme.docx
