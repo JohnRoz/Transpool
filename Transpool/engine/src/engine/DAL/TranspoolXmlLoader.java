@@ -3,15 +3,18 @@ package engine.DAL;
 import engine.DAL.transpoolXMLSchema.*;
 import engine.TranspoolManager;
 import model.CustomExceptions.FormattedMessageException;
+import model.CustomExceptions.StationDoesNotExistException;
 import model.CustomExceptions.TranspoolXmlValidationException;
 import model.CustomExceptions.UnsupportedFileTypeException;
 import model.*;
+import model.util.collections.Graph;
 
 import javax.naming.OperationNotSupportedException;
 import javax.xml.bind.JAXBException;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -60,18 +63,18 @@ public class TranspoolXmlLoader {
         List<Stop> stops = xmlRoot.getMapDescriptor().getStops().getStop();
 
         assertStationsInMapRange(boundaries, stops);
-        Set<Station> stations = createStations(stops);
+        Graph<Station, Road> stationsGraph = createStationsGraph(stops);
 
         List<Path> paths = xmlRoot.getMapDescriptor().getPaths().getPath();
-        Set<Road> roads = createRoads(paths, stations);
+        createRoads(paths, stationsGraph);
 
         List<TransPoolTrip> xmlTrips = xmlRoot.getPlannedTrips().getTransPoolTrip();
-        Set<TripOffer> tripOffers = createTripOffers(stations, roads, xmlTrips);
+        Set<TripOffer> tripOffers = createTripOffers(stationsGraph, xmlTrips);
 
         // In case the transpoolManager is being recreated (This is not the first file loaded).
         TranspoolManager.reset();
         try {
-            return TranspoolManager.init(boundaries, stations, roads, tripOffers);
+            return TranspoolManager.init(boundaries, stationsGraph, tripOffers);
         } catch (OperationNotSupportedException e) {
             // This shouldn't ever happen since a called reset before calling init
             e.printStackTrace();
@@ -167,28 +170,20 @@ public class TranspoolXmlLoader {
 
     }
 
-    /**
-     * Checks the list of stops given in the file is valid, and returns a Set containing the
-     * stations of the map.
-     *
-     * @param stops The list of stops given from the file.
-     * @return A {@code Set<Station>} containing the collection of stations in the map.
-     * @throws TranspoolXmlValidationException In case there are two or more stops with the same name in the stops list.
-     */
-    private static Set<Station> createStations(List<Stop> stops)
+    private static Graph<Station, Road> createStationsGraph(List<Stop> stops)
             throws TranspoolXmlValidationException {
-        Set<Station> stations = new HashSet<>();
+        Graph<Station, Road> stationsGraph = new Graph<>();
 
         for (Stop stop : stops) {
             String name = stop.getName().trim();
             int x = stop.getX();
             int y = stop.getY();
 
-            assertOverlappingStations(stations, stop);
+            assertOverlappingStations(stationsGraph.getVertices(), stop);
 
             // If the set already contained a station that's equal to the
             // current station (has equal name or equal coordinate)
-            if (!stations.add(new Station(name, x, y))) {
+            if (!stationsGraph.addVertexIfAbsent(new Station(name, x, y))) {
                 throw new TranspoolXmlValidationException(
                         "A station with the name %s already exist.",
                         name, x, y
@@ -196,7 +191,7 @@ public class TranspoolXmlLoader {
             }
         }
 
-        return stations;
+        return stationsGraph;
     }
 
     /**
@@ -220,58 +215,71 @@ public class TranspoolXmlLoader {
             );
     }
 
+
     /**
      * Checks the list of paths given in the file is valid, and returns a Set containing the
      * roads of the map.
      *
-     * @param paths    The {@link List} of paths given from the file.
-     * @param stations The {@link Set} of {@link Station}s from the file.
-     * @return A {@link Set} of {@link Road}s that is created from the list
-     * the file specifies in case data in it is valid.
+     * @param paths         The {@link List} of paths given from the file.
+     * @param stationsGraph The data structure ({@link Graph>}) that contains the stations in the map.
+     *                      the file specifies in case data in it is valid.
      * @throws TranspoolXmlValidationException In case the source or destination of at least one path do not exist in
      *                                         the stations Set, or, if two paths in the list have the same source and destination.
      */
-    private static Set<Road> createRoads(List<Path> paths, Set<Station> stations)
+    private static void createRoads(List<Path> paths, Graph<Station, Road> stationsGraph)
             throws TranspoolXmlValidationException {
-        Set<Road> roads = new HashSet<>();
-
         for (Path path : paths) {
-            assertPathSrcAndDst(stations, path);
+            String srcStationName = path.getFrom().trim();
+            String dstStationName = path.getTo().trim();
 
-            String srcStation = path.getFrom().trim(), dstStation = path.getTo().trim();
-            boolean isOneWay = path.isOneWay();
-            int pathLen = path.getLength(), fuelCons = path.getFuelConsumption(), speedLim = path.getSpeedLimit();
-
-            Road newRoad = new Road(srcStation, dstStation, isOneWay, pathLen, fuelCons, speedLim);
+            Road newRoad = createRoadFromPath(path, stationsGraph.getVertices());
 
             // Check if the set already contains the new road (considers cases of two-way roads)
-            if (Road.containsRoad(roads, newRoad)) {
+            if (stationsGraph.doesEdgeExist(newRoad)) {
                 throw new TranspoolXmlValidationException(
                         "A road between these two stations, %s and %s, already exist in the system.",
-                        srcStation, dstStation
+                        srcStationName, dstStationName
                 );
             }
 
-            roads.add(newRoad);
+            try {
+                Station srcStation = Station.getStationByName(stationsGraph.getVertices(), srcStationName);
+                Station dstStation = Station.getStationByName(stationsGraph.getVertices(), dstStationName);
+                stationsGraph.addEdge(srcStation, dstStation, newRoad, !newRoad.isOneWay());
+            } catch (StationDoesNotExistException e) {
+                e.printStackTrace();
+                // Won't happen, since I checked they exist in assertPathSrcAndDst
+            }
         }
+    }
 
-        return roads;
+    private static Road createRoadFromPath(Path path, Collection<Station> existingStations) throws TranspoolXmlValidationException {
+        String srcStationName = path.getFrom().trim();
+        String dstStationName = path.getTo().trim();
+
+        assertPathSrcAndDst(existingStations, srcStationName, dstStationName);
+
+
+        boolean isOneWay = path.isOneWay();
+        int pathLen = path.getLength();
+        int fuelCons = path.getFuelConsumption();
+        int speedLim = path.getSpeedLimit();
+
+        return new Road(srcStationName, dstStationName, isOneWay, pathLen, fuelCons, speedLim);
     }
 
     /**
      * Checks for a given path that its source and destination Stations exist in the given
      * stations Set.
      *
-     * @param stations The set of existing Stations in the system.
-     * @param path     The path to check that its source and destination exist.
+     * @param stations   The set of existing Stations in the system.
+     * @param srcStation Path's source station to check that exist.
+     * @param dstStation Path's destination station to check that exist.
      * @throws TranspoolXmlValidationException In case one of the source or destination stations
      *                                         of the path do not exist.
      */
-    private static void assertPathSrcAndDst(Set<Station> stations, Path path)
+    private static void assertPathSrcAndDst(Collection<Station> stations, String srcStation, String dstStation)
             throws TranspoolXmlValidationException {
-        String srcStation = path.getFrom();
-        String dstStation = path.getTo();
-
         // If the stations Set doesn't contain the source or dest stations
         // - throw an exception with a matching description for each case
         if (!Station.containsStationByName(stations, srcStation))
@@ -289,19 +297,21 @@ public class TranspoolXmlLoader {
     /**
      * Checks that the list of trip offers from the file is valid, and returns a {@link Set} of the {@link TripOffer}s
      *
-     * @param stations The set of stations in the map.
-     * @param roads    The set of roads in the map.
-     * @param xmlTrips The list of trip offers given from the xml file.
+     * @param stationsGraph The {@link Graph} containing the stations and roads on the map.
+     * @param xmlTrips      The list of trip offers given from the xml file.
      * @return A {@code Set<TripOffer>} containing the trip offers given in the file.
      * @throws TranspoolXmlValidationException In case the list of trip offers in the file in
      *                                         invalid i.e contains non-existent stations or roads etc.
      */
-    private static Set<TripOffer> createTripOffers(Set<Station> stations, Set<Road> roads, List<TransPoolTrip> xmlTrips)
+    private static Set<TripOffer> createTripOffers(Graph<Station, Road> stationsGraph, List<TransPoolTrip> xmlTrips)
             throws TranspoolXmlValidationException {
         Set<TripOffer> tripOffers = new HashSet<>();
 
         for (TransPoolTrip trip : xmlTrips) {
             Route tripRoute = trip.getRoute();
+            Set<Station> stations = stationsGraph.getVertices();
+            Set<Road> roads = stationsGraph.getEdges();
+
             assertTripRouteStations(stations, tripRoute);
             assertPlannedTripRoads(roads, tripRoute);
 

@@ -3,7 +3,6 @@ package ui.util;
 import model.Enums.UserAction;
 import model.Interfaces.IdentifiableTranspoolEntity;
 import model.Interfaces.NamedTranspoolEntity;
-import model.Interfaces.TranspoolEntity;
 import model.Road;
 import model.Station;
 

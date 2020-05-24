@@ -14,11 +14,11 @@ public class Graph<T, K> {
     private final Map<T, Vertex<T, K>> vertexMap = new HashMap<>();
 
     //region Mutate Graph
-    public void addVertex(T toAdd) {
-        vertexMap.putIfAbsent(toAdd, new Vertex<>(toAdd));
+    public boolean addVertexIfAbsent(T toAdd) {
+        return vertexMap.putIfAbsent(toAdd, new Vertex<>(toAdd)) == null;
     }
 
-    public void removeVertex(T toRemove) {
+    public boolean removeVertex(T toRemove) {
         if (vertexMap.containsKey(toRemove)) {
             Vertex<T, K> v = vertexMap.remove(toRemove);
 
@@ -26,15 +26,18 @@ public class Graph<T, K> {
             //vertexMap.values().forEach(vertex -> vertex.outwardEdges.removeIf(edge -> edge.dest.equals(v)));
             vertexMap.values().forEach(vertex -> vertex.removeEdgeTo(v));
             v.destroy();
+            return true;
         }
+
+        return false;
     }
 
     public void addEdge(T src, T dst, K weight, boolean isBiDirectional) {
         if (!vertexMap.containsKey(src))
-            addVertex(src);
+            addVertexIfAbsent(src);
 
         if (!vertexMap.containsKey(dst))
-            addVertex(dst);
+            addVertexIfAbsent(dst);
 
         Vertex<T, K> srcVertex = vertexMap.get(src);
         Vertex<T, K> dstVertex = vertexMap.get(dst);
@@ -73,16 +76,25 @@ public class Graph<T, K> {
     }
     //endregion
 
-    // TODO: Complete Mocks
     //region Query Graph
-    public boolean doesPathExist(T from, T to) {
-        // If at least one of the vertices do not exist
-        if (!vertexMap.containsKey(from) || !vertexMap.containsKey(to))
-            return false;
+    public boolean doesVertexExist(T vertex) {
+        return getVertices().contains(vertex);
+    }
 
+    public boolean doesEdgeExist(K weight) {
+        for (Vertex<T, K> vertex : vertexMap.values()) {
+            if (vertex.hasEdge(weight))
+                return true;
+        }
+
+        return false;
+    }
+
+    public boolean doesPathExist(T from, T to) {
         return getPath(from, to) != null;
     }
 
+    // TODO: Complete Mock
     public Object getPath(T from, T to) {
         // If at least one of the vertices do not exist
         if (!vertexMap.containsKey(from) || !vertexMap.containsKey(to))
@@ -134,7 +146,7 @@ public class Graph<T, K> {
         }
 
         public void clearEdges() {
-            this.getOutwardEdges().clear();
+            getOutwardEdges().clear();
         }
 
         private Edge<T, K> getEdgeByWeight(K weight) {

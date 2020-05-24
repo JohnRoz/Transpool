@@ -2,6 +2,7 @@ package model;
 
 import model.CustomExceptions.RoadDoesNotExistException;
 import model.CustomExceptions.StationDoesNotExistException;
+import model.util.collections.Graph;
 
 import javax.naming.OperationNotSupportedException;
 import java.awt.*;
@@ -34,16 +35,16 @@ public class Map {
     // Singleton instance
     private static Map instance;
 
-    private final Set<Road> roads;
-    private final Set<Station> stations;
+    private final Graph<Station, Road> stationsGraph;
+
     //endregion
 
     //region Ctor
-    private Map(int length, int width, Set<Station> stations, Set<Road> roads) {
+    private Map(int length, int width, Graph<Station, Road> stationsGraph) {
         LENGTH = length;
         WIDTH = width;
-        this.roads = roads;
-        this.stations = stations;
+
+        this.stationsGraph = stationsGraph;
     }
     //endregion
 
@@ -62,12 +63,11 @@ public class Map {
      * the roads and stations sets.
      * Should be called only once at the startup of the app.
      *
-     * @param stations The list of stations to instantiate the map with.
-     * @param roads    The list of roads to instantiate the map with.
+     * @param stationsGraph The data structure that contains the stations and the roads and their relationships in the map.
      * @return The instantiated reference to the new model.Map Singleton object
      * @throws OperationNotSupportedException If the model.Map Singleton has been already initialized.
      */
-    public static Map init(int length, int width, Set<Station> stations, Set<Road> roads)
+    public static Map init(int length, int width, Graph<Station, Road> stationsGraph)
             throws OperationNotSupportedException {
         if (instance != null)
             throw new OperationNotSupportedException(
@@ -76,7 +76,7 @@ public class Map {
                             "In Order to recreate a Map, you have to call reset() first."
             );
 
-        return instance = new Map(length, width, stations, roads);
+        return instance = new Map(length, width, stationsGraph);
     }
 
     public static void reset() {
@@ -84,11 +84,11 @@ public class Map {
     }
 
     public Set<Road> getRoads() {
-        return roads;
+        return stationsGraph.getEdges();
     }
 
     public Set<Station> getStations() {
-        return stations;
+        return stationsGraph.getVertices();
     }
 
     public boolean isOnMap(Point point) {
@@ -108,11 +108,11 @@ public class Map {
     }
 
     public boolean hasStation(String stationName) {
-        return Station.containsStationByName(this.stations, stationName);
+        return Station.containsStationByName(getStations(), stationName);
     }
 
     public Station getStation(String stationName) throws StationDoesNotExistException {
-        return Station.getStationByName(this.stations, stationName);
+        return Station.getStationByName(getStations(), stationName);
     }
 
     public Station getStationIfExists(String stationName) {
@@ -138,11 +138,11 @@ public class Map {
     }
 
     public boolean hasRoad(String srcStation, String dstStation) {
-        return Road.containsRoadBySrcAndDstNames(this.roads, srcStation, dstStation);
+        return Road.containsRoadBySrcAndDstNames(getRoads(), srcStation, dstStation);
     }
 
-    public Road getRoad(String srcStation, String dstStation) throws RoadDoesNotExistException{
-        return Road.getRoadBySrcDst(this.roads, srcStation, dstStation);
+    public Road getRoad(String srcStation, String dstStation) throws RoadDoesNotExistException {
+        return Road.getRoadBySrcDst(getRoads(), srcStation, dstStation);
     }
 
     public List<Road> getRoadsByStationsList(List<Station> stations) throws RoadDoesNotExistException {

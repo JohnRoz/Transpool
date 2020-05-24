@@ -3,6 +3,7 @@ package engine;
 import engine.DAL.transpoolXMLSchema.MapBoundries;
 import model.*;
 import model.CustomExceptions.UserAlreadyExistsException;
+import model.util.collections.Graph;
 
 import javax.naming.OperationNotSupportedException;
 import java.net.UnknownServiceException;
@@ -16,16 +17,16 @@ import java.util.Set;
 public class TranspoolManager {
 
     private static TranspoolManager instance;
-    private TripsManager tripsManager;
-    private Set<User> users;
+    private final TripsManager tripsManager;
+    private final Set<User> users;
 
-    private TranspoolManager(MapBoundries mapBoundries, Set<Station> stations, Set<Road> roads, Set<TripOffer> tripOffers) {
+    private TranspoolManager(MapBoundries mapBoundries, Graph<Station, Road> stationsGraph, Set<TripOffer> tripOffers) {
         int mapLength = mapBoundries.getLength();
         int mapWidth = mapBoundries.getWidth();
 
         try {
             Map.reset();
-            Map.init(mapLength, mapWidth, stations, roads);
+            Map.init(mapLength, mapWidth, stationsGraph);
         } catch (OperationNotSupportedException e) {
             e.printStackTrace();
         }
@@ -35,14 +36,14 @@ public class TranspoolManager {
     }
 
     //region Singleton Init & Get
-    public static TranspoolManager init(MapBoundries mapBoundries, Set<Station> stations, Set<Road> roads, Set<TripOffer> tripOffers) throws OperationNotSupportedException {
+    public static TranspoolManager init(MapBoundries mapBoundries, Graph<Station, Road> stationsGraph, Set<TripOffer> tripOffers) throws OperationNotSupportedException {
         if (instance != null)
             throw new OperationNotSupportedException(
                     "TranspoolManager cannot be initialized more than once.\n" +
                             "Use getInstance() to get a reference to the Map instead.\n" +
                             "In Order to recreate the TranspoolManager, you have to call reset() first."
             );
-        return (instance = new TranspoolManager(mapBoundries, stations, roads, tripOffers));
+        return (instance = new TranspoolManager(mapBoundries, stationsGraph, tripOffers));
     }
 
     public static TranspoolManager getInstance() {
