@@ -53,6 +53,10 @@ public class TranspoolManager {
     public static void reset() {
         if (instance != null)
             instance = null;
+
+        TripOffer.resetIds();
+        TripRequest.resetIds();
+        User.resetIds();
     }
     //endregion
 

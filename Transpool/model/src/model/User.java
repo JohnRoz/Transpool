@@ -75,6 +75,10 @@ public class User implements NamedTranspoolEntity, IdentifiableTranspoolEntity {
     //region Public Methods
 
     //region Static Methods
+    public static void resetIds() {
+        ID = 0;
+    }
+
     public static boolean hasUserById(Collection<? extends User> users, int id) {
         return getUserById(users, id) != null;
     }

@@ -160,6 +160,10 @@ public class TripRequest implements IdentifiableTranspoolEntity {
     //endregion
 
     //region Public Methods
+    public static void resetIds() {
+        ID = 0;
+    }
+
     public boolean isMatched() {
         return getMatchedTo() != null;
     }
