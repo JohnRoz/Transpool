@@ -123,23 +123,23 @@ public class TranspoolXmlLoader {
 
         if (length > Map.MAX_LENGTH)
             throw new TranspoolXmlValidationException(
-                    expMsgPrefix + "The length of the map exceeds the max value of %d.",
-                    Map.MAX_LENGTH
+                    expMsgPrefix + "The length of the map exceeds the max value of %d by %d.",
+                    Map.MAX_LENGTH, length - Map.MAX_LENGTH
             );
         if (length < Map.MIN_LENGTH)
             throw new TranspoolXmlValidationException(
-                    expMsgPrefix + "The length of the map falls short of the min value of %d.",
-                    Map.MIN_LENGTH
+                    expMsgPrefix + "The length of the map falls short of the min value of %d by %d.",
+                    Map.MIN_LENGTH, Map.MIN_LENGTH - length
             );
         if (width > Map.MAX_WIDTH)
             throw new TranspoolXmlValidationException(
-                    expMsgPrefix + "The width of the map exceeds the max value of %d.",
-                    Map.MAX_WIDTH
+                    expMsgPrefix + "The width of the map exceeds the max value of %d by %d.",
+                    Map.MAX_WIDTH, width - Map.MAX_WIDTH
             );
         if (width < Map.MIN_WIDTH)
             throw new TranspoolXmlValidationException(
-                    expMsgPrefix + "The width of the map falls short of the min value of %d.",
-                    Map.MIN_WIDTH
+                    expMsgPrefix + "The width of the map falls short of the min value of %d by %d.",
+                    Map.MIN_WIDTH, Map.MIN_WIDTH - width
             );
     }
 
@@ -190,7 +190,7 @@ public class TranspoolXmlLoader {
             // current station (has equal name or equal coordinate)
             if (!stations.add(new Station(name, x, y))) {
                 throw new TranspoolXmlValidationException(
-                        "A station with the name %s already exist.",
+                        "A station with the name '%s' already exist in the system and cannot be added more than once.",
                         name, x, y
                 );
             }
@@ -374,14 +374,25 @@ public class TranspoolXmlLoader {
             e.printStackTrace();
         }
 
-        int day = trip.getScheduling().getDayStart();
-        int hour = trip.getScheduling().getHourStart();
-        int minute = 0; //trip.getScheduling().getMinuteStart(); TODO: Uncomment in next schema version.
-        String repetition = trip.getScheduling().getRecurrences();
-
-        TripTiming timing = new TripTiming(day, hour, minute, repetition);
+        TripTiming timing = createTiming(trip.getScheduling());
 
         return new TripOffer(owner, capacity, PPK, timing, tripStations, tripRoads);
+    }
+
+    private static TripTiming createTiming(Scheduling scheduling) {
+        if (scheduling == null)
+            throw new IllegalArgumentException("Can't have null argument.");
+
+        Integer temp;
+        int day = (temp = scheduling.getDayStart()) == null ? 0 : temp;
+        int hour = scheduling.getHourStart();
+        int minute = 0; //(temp = scheduling.getMinuteStart()) == null ? 0 : temp;
+
+        String repetition = scheduling.getRecurrences() == null
+                ? "OneTime"
+                : scheduling.getRecurrences();
+
+        return new TripTiming(day, hour, minute, repetition);
     }
     //endregion
 }

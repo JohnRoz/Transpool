@@ -122,6 +122,10 @@ public class TripOffer implements IdentifiableTranspoolEntity {
     //region Public methods
 
     //region Public Static Methods
+    public static void resetIds() {
+        ID = 0;
+    }
+
     public static boolean hasTripOfferById(Collection<TripOffer> tripOffers, int id) {
         return getTripOfferById(tripOffers, id) != null;
     }
